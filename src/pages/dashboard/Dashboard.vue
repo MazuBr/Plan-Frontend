@@ -12,5 +12,6 @@ if (!session.isAuth.value) {
 
 <template>
   <h1>Hello from dash🛹</h1>
+  <pre>{{ session.user }}</pre>
   <Button @click="() => session.logout()">logout</Button>
 </template>

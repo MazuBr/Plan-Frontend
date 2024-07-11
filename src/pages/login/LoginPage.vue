@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useSessionState } from "../../entities/user/model";
-import { Button } from "../../shared/ui/design";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/shared/ui/design/ui/card";
+import Button from "@/shared/ui/design/ui/button/Button.vue";
 
 const session = useSessionState();
 
@@ -11,6 +18,30 @@ if (session.isAuth.value) {
 </script>
 
 <template>
-  <h1>Hello from 🪵in📃.</h1>
-  <Button @click="() => session.login()">login</Button>
+  <div class="flex justify-evenly items-center h-full">
+    <Card class="w-[320px]">
+      <CardHeader>
+        <div>
+          <router-link :to="{ name: 'login' }">
+            <div class="text-monochrome-5">← назад</div>
+          </router-link>
+        </div>
+        <CardTitle>Планирунчик 🎇</CardTitle>
+        <CardDescription>v.beta.0.0.0</CardDescription>
+      </CardHeader>
+
+      <CardContent class="max-h-[80vh] overflow-auto">
+        <router-view></router-view>
+      </CardContent>
+    </Card>
+
+    <div>
+      <img
+        src="./abstract_cube-Photoroom.png"
+        alt="random cube"
+        class="bg-cover animate-spin"
+        style="animation-duration: 5000ms"
+      />
+    </div>
+  </div>
 </template>

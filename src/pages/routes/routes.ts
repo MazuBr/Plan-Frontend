@@ -17,7 +17,6 @@ declare module "vue-router" {
 const routes: RouteRecordRaw[] = [
   {
     path: "/login",
-    name: "login",
     component: () => import("../login/LoginPage.vue"),
     meta: {
       label: "Авторизация",
@@ -25,6 +24,38 @@ const routes: RouteRecordRaw[] = [
       visible: false,
       layoutOverride: "AuthLayout",
     },
+    children: [
+      {
+        path: "",
+        name: "login",
+        component: () => import("../login/LoginForm.vue"),
+        meta: {
+          label: "Авторизация",
+          visible: false,
+          breadCrumb: "Авторизация",
+        },
+      },
+      {
+        path: "register",
+        name: "register",
+        component: () => import("../login/RegisterForm.vue"),
+        meta: {
+          label: "Регистрация",
+          visible: false,
+          breadCrumb: "Регистрация",
+        },
+      },
+      {
+        path: "forgot-password",
+        name: "forgot-password",
+        component: () => import("../login/ForgotPasswordForm.vue"),
+        meta: {
+          label: "Забыли пароль",
+          visible: false,
+          breadCrumb: "Забыли пароль",
+        },
+      },
+    ],
   },
   {
     path: "/dashboard",
