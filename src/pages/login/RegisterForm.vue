@@ -40,8 +40,22 @@ const form = useForm({
 
 const session = useSessionState();
 async function onSubmit(values: GenericObject) {
-  console.log(values);
-  await session.register(values as UserCreate);
+  try {
+    await session.register(values as UserCreate);
+  } catch (e) {
+    const errDetails = (e as any)?.response?.data?.detail;
+    if (!errDetails) return;
+
+    let errorBag: GenericObject = {};
+    for (const key in errDetails) {
+      if (Object.prototype.hasOwnProperty.call(errDetails, key)) {
+        const element = errDetails[key];
+        errorBag[key] = element;
+      }
+    }
+
+    form.setErrors(errorBag);
+  }
 }
 </script>
 
