@@ -1,0 +1,77 @@
+<script setup lang="ts">
+import { useSessionState } from "@/entities/user/model";
+import { UserCreate } from "@/shared/api/restApi";
+import AnimatedText from "@/shared/ui/design/ui/animated-text/AnimatedText.vue";
+import { AutoForm } from "@/shared/ui/design/ui/auto-form";
+import Button from "@/shared/ui/design/ui/button/Button.vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import { GenericObject, useForm } from "vee-validate";
+import { z } from "zod";
+
+const formSchema = z
+  .object({
+    username: z
+      .string({ required_error: "Логин обязателен" })
+      .max(50, { message: "Максимальная длина 50 символов" })
+      .describe("Логин"),
+    email: z
+      .string({ required_error: "Почта обязательна" })
+      .email({ message: "Неправильный формат" })
+      .describe("Электронная почта"),
+    password: z
+      .string({ required_error: "Пароль обязателен" })
+      .describe("Пароль"),
+    confirm: z
+      .string({ required_error: "Пароль обязателен" })
+      .describe("Подтвердите пароль"),
+    first_name: z.string().describe("Имя").optional(),
+    last_name: z.string().describe("Фамилия").optional(),
+    phone: z.string().describe("Телефон").optional(),
+    address: z.string().describe("Адрес").optional(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Пароли должны совпадать",
+    path: ["confirm"],
+  });
+
+const form = useForm({
+  validationSchema: toTypedSchema(formSchema),
+});
+
+const session = useSessionState();
+async function onSubmit(values: GenericObject) {
+  console.log(values);
+  await session.register(values as UserCreate);
+}
+</script>
+
+<template>
+  <div class="text-lg mb-3">Регистрация</div>
+
+  <AutoForm
+    class="space-y-3"
+    :form="form"
+    :schema="formSchema"
+    :field-config="{
+      password: {
+        inputProps: {
+          type: 'password',
+        },
+      },
+      confirm: {
+        inputProps: {
+          type: 'password',
+        },
+      },
+    }"
+    @submit="onSubmit"
+  >
+    <Button :disabled="form.isSubmitting.value" type="submit">
+      <AnimatedText
+        text="Подтвердить"
+        active-text="Подождите"
+        :active="form.isSubmitting.value"
+      ></AnimatedText>
+    </Button>
+  </AutoForm>
+</template>
