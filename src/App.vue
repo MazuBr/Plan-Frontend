@@ -1,22 +1,15 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { onBeforeMount } from "vue";
 import Routing from "./pages/index.vue";
 import { useSessionState } from "./entities/user/model";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
-const session = useSessionState();
-watch(
-  () => session.isAuth.value,
-  (val) => {
-    if (!val) {
-      router.replace({ path: "/login" });
-    } else {
-      router.replace({ path: "/dashboard" });
-    }
-  },
-  { immediate: true }
-);
+onBeforeMount(() => {
+  // try
+  const token = localStorage.getItem("jwt");
+  if (token) {
+    useSessionState().setJwt(token);
+  }
+});
 </script>
 
 <template>

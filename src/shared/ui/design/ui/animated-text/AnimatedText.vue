@@ -30,4 +30,27 @@ const textContent = computed(() =>
   animation-iteration-count: infinite;
   animation-timing-function: steps(2);
 }
+
+@keyframes typewriter-loading {
+  0% {
+    width: 0ch;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  33% {
+    width: 1ch;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  66% {
+    width: 2ch;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  100% {
+    width: 0ch;
+    overflow: hidden;
+    word-break: break-all;
+  }
+}
 </style>

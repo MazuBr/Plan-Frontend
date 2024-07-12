@@ -15,6 +15,20 @@ export interface HTTPValidationError {
   detail?: ValidationError[];
 }
 
+/** LoginRequest */
+export interface LoginRequest {
+  /** Identifier */
+  identifier: string;
+  /** Password */
+  password: string;
+}
+
+/** LogoutResponse */
+export interface LogoutResponse {
+  /** Detail */
+  detail: string;
+}
+
 /** TokenData */
 export interface TokenData {
   /** Token */
@@ -235,6 +249,42 @@ export class RestApi<SecurityDataType extends unknown> extends HttpClient<Securi
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name LoginUserLoginPost
+     * @summary Login
+     * @request POST:/user/login
+     */
+    loginUserLoginPost: (data: LoginRequest, params: RequestParams = {}) =>
+      this.request<TokenData, HTTPValidationError>({
+        path: `/user/login`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name LogoutUserUserLogoutPost
+     * @summary Logout User
+     * @request POST:/user/logout
+     * @secure
+     */
+    logoutUserUserLogoutPost: (params: RequestParams = {}) =>
+      this.request<LogoutResponse, any>({
+        path: `/user/logout`,
+        method: "POST",
+        secure: true,
         format: "json",
         ...params,
       }),
