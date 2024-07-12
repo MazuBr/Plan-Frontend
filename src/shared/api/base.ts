@@ -24,10 +24,6 @@ restClient.instance.interceptors.request.use(async (config) => {
   }
 
   const token = localStorage.getItem("jwt");
-  if (config.skipAuthWithToken) {
-    config.headers && (config.headers["Authorization"] = `Bearer ${token}`);
-    return config;
-  }
 
   config.headers && (config.headers["Authorization"] = `Bearer ${token}`);
   return config;
