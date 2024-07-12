@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardContent,
 } from "@/shared/ui/design/ui/card";
-import Button from "@/shared/ui/design/ui/button/Button.vue";
 
 const session = useSessionState();
 
@@ -22,7 +21,7 @@ if (session.isAuth.value) {
     <Card class="w-[320px]">
       <CardHeader>
         <div>
-          <router-link :to="{ name: 'login' }">
+          <router-link v-if="$route.name !== 'login'" :to="{ name: 'login' }">
             <div class="text-monochrome-5">← назад</div>
           </router-link>
         </div>
@@ -39,8 +38,8 @@ if (session.isAuth.value) {
       <img
         src="./abstract_cube-Photoroom.png"
         alt="random cube"
-        class="bg-cover animate-spin"
-        style="animation-duration: 5000ms"
+        class="animate-spin object-cover h-[400px] w-[400px]"
+        style="animation-duration: 30000ms"
       />
     </div>
   </div>

@@ -2,7 +2,7 @@ import { computed, ref } from "vue";
 import { createGlobalState } from "@vueuse/core";
 import { router } from "../../pages/routes/routes";
 import { restClient } from "@/shared/api/base";
-import { UserCreate } from "@/shared/api/restApi";
+import { LoginRequest, UserCreate } from "@/shared/api/restApi";
 
 export const useSessionState = createGlobalState(() => {
   const user = ref();
@@ -10,23 +10,34 @@ export const useSessionState = createGlobalState(() => {
 
   const isAuth = computed(() => !!accessToken.value);
 
+  function setJwt(token: string | null) {
+    if (token) {
+      localStorage.setItem("jwt", token);
+    } else {
+      localStorage.removeItem("jwt");
+    }
+    accessToken.value = token;
+  }
+
   async function register(payload: UserCreate) {
     const createUserData = (
       await restClient.user.createUserUserCreatePost(payload)
     ).data;
-    accessToken.value = createUserData.token_data.token;
+    setJwt(createUserData.token_data.token);
     user.value = createUserData;
+    router.push({ name: "dashboard" });
   }
 
-  async function login() {
-    accessToken.value = "test";
+  async function login(payload: LoginRequest) {
+    const loginData = (await restClient.user.loginUserLoginPost(payload)).data;
 
+    setJwt(loginData.token);
     router.push({ name: "dashboard" });
   }
 
   async function logout() {
-    accessToken.value = null;
-
+    await restClient.user.logoutUserUserLogoutPost();
+    setJwt(null);
     router.push({ name: "login" });
   }
 
@@ -38,5 +49,6 @@ export const useSessionState = createGlobalState(() => {
     logout,
 
     register,
+    setJwt,
   };
 });
