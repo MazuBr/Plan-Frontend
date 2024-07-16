@@ -10,6 +10,7 @@ export const restClient = new RestApi({
   timeout: 60_000,
   timeoutErrorMessage: "Лимит в 60 секунд превышен",
   headers: { Accept: "application/json" },
+  withCredentials: true
 });
 
 restClient.instance.interceptors.response.use(

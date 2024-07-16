@@ -21,7 +21,11 @@ export const useSessionState = createGlobalState(() => {
     try {
       await restClient.user.checkSessionUserCheckSessionPost();
       isAuth.value = true;
-      router.push({ name: "dashboard" });
+
+      // TODO resume session properly
+      if (router.currentRoute.value.fullPath.includes("/login")) {
+        router.push({ name: "dashboard" });
+      }
     } catch (e) {
       isAuth.value = false;
     }
