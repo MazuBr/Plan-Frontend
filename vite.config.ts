@@ -14,7 +14,18 @@ export default defineConfig({
     include: ["src/**/*.test.ts"],
     exclude: ["dict/**"],
   },
-  plugins: [vue()],
+  plugins: [
+    vue(),
+  ],
+  server: {
+    
+    https: {
+      key: "./cert/key.pem",
+      cert: "./cert/cert.pem",
+      
+    },
+    host: "0.0.0.0",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

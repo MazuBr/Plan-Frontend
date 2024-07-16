@@ -11,5 +11,5 @@ npm run dev
 ### Codegen
 
 ```
-npx swagger-typescript-api -p http://25.22.142.249/openapi.json -o ./src/shared/api -n restApi.ts --axios --api-class-name RestApi
+npx swagger-typescript-api -p ./openapi.json -o ./src/shared/api -n restApi.ts --axios --api-class-name RestApi
 ```

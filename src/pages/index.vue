@@ -8,10 +8,6 @@ import { useSessionState } from "../entities/user/model";
 
 const session = useSessionState();
 
-const isAuth = computed(() => {
-  return !!session.accessToken.value;
-});
-
 const layout: Record<
   "MainLayout" | "EditorLayout" | "AuthLayout",
   ReturnType<typeof defineAsyncComponent> | "div"
@@ -25,7 +21,7 @@ const layout: Record<
 <template>
   <component
     :is="layout[$route.meta.layoutOverride || 'MainLayout']"
-    v-if="isAuth"
+    v-if="session.isAuth"
   >
     <template #default>
       <router-view v-slot="{ Component }">

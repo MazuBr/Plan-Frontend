@@ -1,9 +1,4 @@
-import {
-  createMemoryHistory,
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw,
-} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 type Subjects = "task" | "calendar" | "settings";
 
@@ -88,5 +83,6 @@ const routes: RouteRecordRaw[] = [
 
 export const router = createRouter({
   history: createWebHistory(),
+
   routes,
 });
