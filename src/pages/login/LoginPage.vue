@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { useSessionState } from "../../entities/user/model";
 import {
   Card,
   CardHeader,
@@ -8,12 +6,6 @@ import {
   CardDescription,
   CardContent,
 } from "@/shared/ui/design/ui/card";
-
-const session = useSessionState();
-
-if (session.isAuth.value) {
-  useRouter().push({ name: "dashboard" });
-}
 </script>
 
 <template>

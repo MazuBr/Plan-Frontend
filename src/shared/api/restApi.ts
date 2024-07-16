@@ -9,6 +9,12 @@
  * ---------------------------------------------------------------
  */
 
+/** CheckSessionResponse */
+export interface CheckSessionResponse {
+  /** Detail */
+  detail: string;
+}
+
 /** HTTPValidationError */
 export interface HTTPValidationError {
   /** Detail */
@@ -85,7 +91,6 @@ export interface UserResponse {
   phone?: string | null;
   /** Address */
   address?: string | null;
-  token_data: TokenData;
 }
 
 /** ValidationError */
@@ -285,6 +290,40 @@ export class RestApi<SecurityDataType extends unknown> extends HttpClient<Securi
         path: `/user/logout`,
         method: "POST",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name CheckSessionUserCheckSessionPost
+     * @summary Check Session
+     * @request POST:/user/check-session
+     * @secure
+     */
+    checkSessionUserCheckSessionPost: (params: RequestParams = {}) =>
+      this.request<CheckSessionResponse, any>({
+        path: `/user/check-session`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name RefreshTokenUserRefreshTokenPost
+     * @summary Refresh Token
+     * @request POST:/user/refresh-token
+     */
+    refreshTokenUserRefreshTokenPost: (params: RequestParams = {}) =>
+      this.request<any, any>({
+        path: `/user/refresh-token`,
+        method: "POST",
         format: "json",
         ...params,
       }),

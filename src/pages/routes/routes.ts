@@ -1,9 +1,4 @@
-import {
-  createMemoryHistory,
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw,
-} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 type Subjects = "task" | "calendar" | "settings";
 
@@ -76,17 +71,11 @@ const routes: RouteRecordRaw[] = [
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: () => import("../not-found/PageNotFound.vue"),
-    beforeEnter(x, y, next) {
-      const isLoggedIn = !!localStorage.getItem("jwt");
-      if (!isLoggedIn) {
-        next("/login"); // Для моментального рендера
-        window.location.replace("/login"); // Для сброса состояния
-      }
-    },
   },
 ];
 
 export const router = createRouter({
   history: createWebHistory(),
+
   routes,
 });
