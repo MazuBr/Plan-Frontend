@@ -5,17 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev-expose": "vite --host",
+    "dev-expose": "vite --host local.matv.planirun --port 443",
     "test": "vitest run",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.51.1",
     "@vee-validate/zod": "^4.13.2",
     "@vueuse/core": "^10.11.0",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "jwt-decode": "^4.0.0",
     "lucide-vue-next": "^0.407.0",
     "radix-vue": "^1.9.0",
     "tailwind-merge": "^2.4.0",

@@ -14,18 +14,14 @@ export default defineConfig({
     include: ["src/**/*.test.ts"],
     exclude: ["dict/**"],
   },
-  plugins: [
-    vue(),
-  ],
+  plugins: [vue()],
   server: {
-    
     https: {
       key: "./cert/key.pem",
       cert: "./cert/cert.pem",
-      
     },
-    host: "0.0.0.0",
-    port: 443
+    open: true,
+    port: 443,
   },
   resolve: {
     alias: {
