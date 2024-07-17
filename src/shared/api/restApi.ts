@@ -9,6 +9,14 @@
  * ---------------------------------------------------------------
  */
 
+/** AccessTokenData */
+export interface AccessTokenData {
+  /** Token */
+  token: string;
+  /** Expires In */
+  expires_in: number;
+}
+
 /** CheckSessionResponse */
 export interface CheckSessionResponse {
   /** Detail */
@@ -25,8 +33,18 @@ export interface HTTPValidationError {
 export interface LoginRequest {
   /** Identifier */
   identifier: string;
-  /** Password */
+  /**
+   * Password
+   * @minLength 8
+   */
   password: string;
+}
+
+/** LoginResponse */
+export interface LoginResponse {
+  /** Detail */
+  detail: string;
+  access_token: AccessTokenData;
 }
 
 /** LogoutResponse */
@@ -35,14 +53,11 @@ export interface LogoutResponse {
   detail: string;
 }
 
-/** TokenData */
-export interface TokenData {
-  /** Token */
-  token: string;
-  /** Refresh Token */
-  refresh_token: string;
-  /** Expires In */
-  expires_in: number;
+/** RefreshTokenResponse */
+export interface RefreshTokenResponse {
+  /** Detail */
+  detail: string;
+  access_token: AccessTokenData;
 }
 
 /** UserCreate */
@@ -91,6 +106,7 @@ export interface UserResponse {
   phone?: string | null;
   /** Address */
   address?: string | null;
+  access_token: AccessTokenData;
 }
 
 /** ValidationError */
@@ -148,7 +164,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "" });
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "/api" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -237,6 +253,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title FastAPI
  * @version 0.1.0
+ * @baseUrl /api
  */
 export class RestApi<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   user = {
@@ -267,7 +284,7 @@ export class RestApi<SecurityDataType extends unknown> extends HttpClient<Securi
      * @request POST:/user/login
      */
     loginUserLoginPost: (data: LoginRequest, params: RequestParams = {}) =>
-      this.request<TokenData, HTTPValidationError>({
+      this.request<LoginResponse, HTTPValidationError>({
         path: `/user/login`,
         method: "POST",
         body: data,
@@ -283,31 +300,11 @@ export class RestApi<SecurityDataType extends unknown> extends HttpClient<Securi
      * @name LogoutUserUserLogoutPost
      * @summary Logout User
      * @request POST:/user/logout
-     * @secure
      */
     logoutUserUserLogoutPost: (params: RequestParams = {}) =>
       this.request<LogoutResponse, any>({
         path: `/user/logout`,
         method: "POST",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags users
-     * @name CheckSessionUserCheckSessionPost
-     * @summary Check Session
-     * @request POST:/user/check-session
-     * @secure
-     */
-    checkSessionUserCheckSessionPost: (params: RequestParams = {}) =>
-      this.request<CheckSessionResponse, any>({
-        path: `/user/check-session`,
-        method: "POST",
-        secure: true,
         format: "json",
         ...params,
       }),
@@ -321,8 +318,40 @@ export class RestApi<SecurityDataType extends unknown> extends HttpClient<Securi
      * @request POST:/user/refresh-token
      */
     refreshTokenUserRefreshTokenPost: (params: RequestParams = {}) =>
-      this.request<any, any>({
+      this.request<RefreshTokenResponse, any>({
         path: `/user/refresh-token`,
+        method: "POST",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name AbobaUserAbobaPost
+     * @summary Aboba
+     * @request POST:/user/aboba
+     */
+    abobaUserAbobaPost: (params: RequestParams = {}) =>
+      this.request<any, any>({
+        path: `/user/aboba`,
+        method: "POST",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags users
+     * @name CheckSessionUserCheckSessionPost
+     * @summary Check Session
+     * @request POST:/user/check-session
+     */
+    checkSessionUserCheckSessionPost: (params: RequestParams = {}) =>
+      this.request<CheckSessionResponse, any>({
+        path: `/user/check-session`,
         method: "POST",
         format: "json",
         ...params,

@@ -11,29 +11,36 @@ export const useSessionState = createGlobalState(() => {
 
   async function register(payload: UserCreate) {
     const createUserData = (
-      await restClient.user.createUserUserCreatePost(payload)
+      await restClient.user.createUserUserCreatePost(payload, {
+        skipAuth: true,
+      })
     ).data;
     user.value = createUserData;
     router.push({ name: "dashboard" });
   }
 
   async function checkSession() {
-    try {
-      await restClient.user.checkSessionUserCheckSessionPost();
-      isAuth.value = true;
-
-      // TODO resume session properly
-      if (router.currentRoute.value.fullPath.includes("/login")) {
-        router.push({ name: "dashboard" });
-      }
-    } catch (e) {
-      isAuth.value = false;
-    }
+    // @deprecated
   }
 
   async function login(payload: LoginRequest) {
-    await restClient.user.loginUserLoginPost(payload);
+    const data = await restClient.user.loginUserLoginPost(payload, {
+      skipAuth: true,
+    });
+    localStorage.setItem("jwt", data.data.access_token.token);
+    isAuth.value = true;
+
+    // TODO resume session properly
+    if (router.currentRoute.value.fullPath.includes("/login")) {
+      router.push({ name: "dashboard" });
+    }
+
     await checkSession();
+  }
+
+  function logoutWithoutRequest() {
+    localStorage.removeItem("jwt");
+    window.location.replace("/login");
   }
 
   async function logout() {
@@ -50,6 +57,7 @@ export const useSessionState = createGlobalState(() => {
     logout,
 
     checkSession,
+    logoutWithoutRequest,
     register,
   };
 });
