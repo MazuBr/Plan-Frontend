@@ -59,7 +59,7 @@ async function onSubmit(values: GenericObject) {
           },
         },
       }"
-      @submit="onSubmit"
+      :async-submit="onSubmit"
     >
       <Button :disabled="form.isSubmitting.value" type="submit">
         <AnimatedText
