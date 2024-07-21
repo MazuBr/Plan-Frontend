@@ -58,6 +58,11 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: "/",
+    name: "home",
+    component: () => import("../calendar/CalendarPage.vue"),
+  },
+  {
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../dashboard/Dashboard.vue"),
