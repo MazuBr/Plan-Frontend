@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DefaultLayout from "@/shared/ui/DefaultLayout.vue";
 import Calendar from "@/entities/calendar/ui/CalendarMain.vue";
-import ScheduleTemp from "@/entities/schedule/ui/ScheduleTemp.vue";
+import ScheduleMonth from "@/entities/schedule/ui/ScheduleMonth.vue";
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import ScheduleTemp from "@/entities/schedule/ui/ScheduleTemp.vue";
     <template #main-content>
       <div class="type-two">
         <div class="type-fix w-80"><Calendar /></div>
-        <div><ScheduleTemp /></div>
+        <div><ScheduleMonth locale="ru" /></div>
       </div>
     </template>
   </DefaultLayout>
