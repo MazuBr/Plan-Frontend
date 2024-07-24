@@ -56,6 +56,7 @@ function getDayEvents(cell: DateValue) {
           <ScheduleMonthCell
             :events="getDayEvents(cell)"
             :day="cell.day.toString()"
+            :full-day="cell.toString()"
           />
         </template>
       </CreateEventDialog>
