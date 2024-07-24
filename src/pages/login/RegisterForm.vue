@@ -30,10 +30,15 @@ const formSchema = z
     confirm: z
       .string({ required_error: "Пароль обязателен" })
       .describe("Подтвердите пароль"),
-    first_name: z.string().describe("Имя").optional(),
-    last_name: z.string().describe("Фамилия").optional(),
-    phone: z.string().describe("Телефон").optional(),
-    address: z.string().describe("Адрес").optional(),
+    optional: z
+      .object({
+        first_name: z.string().describe("Имя").optional(),
+        last_name: z.string().describe("Фамилия").optional(),
+        phone: z.string().describe("Телефон").optional(),
+        address: z.string().describe("Адрес").optional(),
+      })
+      .describe("Дополнительные данные")
+      .optional(),
   })
   .refine((data) => data.password === data.confirm, {
     message: "Пароли должны совпадать",
@@ -49,7 +54,12 @@ const session = useSessionState();
 async function onSubmit(values: GenericObject) {
   try {
     error.value = "";
-    await session.register(values as UserCreate);
+    const payload = {
+      ...values,
+      ...values.optional,
+      optional: undefined,
+    };
+    await session.register(payload as UserCreate);
   } catch (e) {
     const errDetails = (e as any)?.response?.data?.detail;
     if (!errDetails) return;
@@ -88,6 +98,20 @@ async function onSubmit(values: GenericObject) {
     :form="form"
     :schema="formSchema"
     :field-config="{
+      optional: {
+        first_name: {
+          label: 'Имя',
+        },
+        last_name: {
+          label: 'Фамилия',
+        },
+        phone: {
+          label: 'Телефон',
+        },
+        address: {
+          label: 'Адрес',
+        },
+      } as any,
       password: {
         inputProps: {
           type: 'password',

@@ -4,7 +4,7 @@ import Button from "@/shared/ui/design/ui/button/Button.vue";
 
 <template>
   <h1>i am 📃 ⛔ 🔍</h1>
-  <router-link :to="{ name: 'dashboard' }">
+  <router-link :to="{ name: 'home' }">
     <Button>На главную</Button>
   </router-link>
 </template>

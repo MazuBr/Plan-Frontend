@@ -18,6 +18,23 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CalendaDeleteEvents = {
+  eventId: Array<Scalars['Int']['input']>;
+};
+
+export type CalendaDeleteEventsResponse = {
+  __typename?: 'CalendaDeleteEventsResponse';
+  ids: Array<Scalars['Int']['output']>;
+};
+
+export type CalendaUpdateEvents = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  endTime?: InputMaybe<Scalars['Int']['input']>;
+  eventId: Scalars['Int']['input'];
+  startTime?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Calendar = {
   __typename?: 'Calendar';
   comment?: Maybe<Scalars['String']['output']>;
@@ -59,6 +76,8 @@ export type CalendarHumanReadable = {
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Calendar;
+  deleteEvent: CalendaDeleteEventsResponse;
+  updateEvent: UpdatedEvent;
 };
 
 
@@ -66,14 +85,30 @@ export type MutationCreateEventArgs = {
   input: CalendarCreateEvent;
 };
 
+
+export type MutationDeleteEventArgs = {
+  input: CalendaDeleteEvents;
+};
+
+
+export type MutationUpdateEventArgs = {
+  input: CalendaUpdateEvents;
+};
+
 export type Query = {
   __typename?: 'Query';
   calendar: Array<CalendarEventsByDay>;
+  calendarEpoch: Array<Calendar>;
   roles: Array<Role>;
 };
 
 
 export type QueryCalendarArgs = {
+  input: CalendarGetEvents;
+};
+
+
+export type QueryCalendarEpochArgs = {
   input: CalendarGetEvents;
 };
 
@@ -87,4 +122,13 @@ export type Role = {
   __typename?: 'Role';
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+};
+
+export type UpdatedEvent = {
+  __typename?: 'UpdatedEvent';
+  comment?: Maybe<Scalars['String']['output']>;
+  endTime?: Maybe<Scalars['Int']['output']>;
+  eventId: Scalars['Int']['output'];
+  startTime?: Maybe<Scalars['Int']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
 };

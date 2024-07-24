@@ -8,9 +8,9 @@ import {
 } from "@/shared/ui/design/ui/dialog";
 import EventForm from "./EventForm.vue";
 import { ref } from "vue";
-import { DateValue } from "@internationalized/date";
+import { CalendarData } from "@/entities/schedule/api";
 
-defineProps<{ initialDate?: DateValue }>();
+defineProps<{ eventData: CalendarData["events"][number] }>();
 
 const isOpened = ref(false);
 </script>
@@ -22,10 +22,10 @@ const isOpened = ref(false);
     </DialogTrigger>
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Создание события</DialogTitle>
+        <DialogTitle>Редактирование события</DialogTitle>
       </DialogHeader>
 
-      <EventForm :initial-date="initialDate" @success="isOpened = false" />
+      <EventForm :event-data="eventData" @success="isOpened = false" />
     </DialogContent>
   </Dialog>
 </template>

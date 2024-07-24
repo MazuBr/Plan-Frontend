@@ -1,5 +1,15 @@
 import { graphqlClient } from "@/shared/api/base";
-import { GetCalendarMonthDocument } from "./GetCalendarMonth.query.generated";
+import {
+  GetCalendarMonthDocument,
+  GetCalendarMonthQuery,
+} from "./GetCalendarMonth.query.generated";
+
+import { DeepExtractTypeSkipArrays } from "ts-deep-extract-types";
+
+export type CalendarData = DeepExtractTypeSkipArrays<
+  GetCalendarMonthQuery,
+  ["calendar"]
+>;
 
 export const scheduleService = {
   getters: {

@@ -5,12 +5,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/shared/ui/design/ui/popover";
-import { CalendarMonthData } from "../api";
+import { CalendarData } from "../api";
 import { ref } from "vue";
 import Button from "@/shared/ui/design/ui/button/Button.vue";
+import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue";
 
 withDefaults(
-  defineProps<{ day: string; events: CalendarMonthData[]; fullDay: string }>(),
+  defineProps<{
+    day: string;
+    events: CalendarData["events"];
+    fullDay: string;
+  }>(),
   {
     events: () => [],
   }
@@ -26,17 +31,24 @@ const popoverOpened = ref(false);
         <span class="text-monochrome-7">{{ day }}</span>
       </div>
 
-      <ul class="text-left text-sm">
-        <li
-          v-for="event in events?.slice(0, 3)"
-          class="w-fit cursor-pointer truncate flex items-center gap-1 hover:text-blue-400"
-          @click.stop
-        >
-          <span class="text-2xl leading-none">•</span>
-          {{ getHoursAndMinutes(event.dayEventStart) }}
-          <span class="font-medium">{{ event.title }}</span>
-        </li>
-      </ul>
+      <div @click.stop>
+        <ul class="text-left text-sm">
+          <li
+            v-for="event in events?.slice(0, 3)"
+            class="cursor-pointer hover:text-blue-400"
+          >
+            <UpdateEventDialog :event-data="event">
+              <template #trigger>
+                <div class="truncate flex items-center gap-1">
+                  <span class="text-2xl leading-none">•</span>
+                  {{ getHoursAndMinutes(event.dayEventStart) }}
+                  <span class="font-medium">{{ event.title }}</span>
+                </div>
+              </template>
+            </UpdateEventDialog>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div @click.stop>
@@ -57,21 +69,26 @@ const popoverOpened = ref(false);
             >
           </div>
 
-          <ul class="text-left text-sm">
-            <li
-              v-for="event in events"
-              class="w-fit cursor-pointer truncate flex items-center gap-1 hover:text-blue-400"
-              @click.stop
-            >
-              <span class="text-2xl leading-none">•</span>
-              {{ getHoursAndMinutes(event.dayEventStart) }}
-              <span class="font-medium">{{ event.title }}</span>
-            </li>
-          </ul>
+          <div @click.stop>
+            <ul class="text-left text-sm">
+              <li
+                v-for="event in events"
+                class="cursor-pointer hover:text-blue-400"
+              >
+                <UpdateEventDialog :event-data="event">
+                  <template #trigger>
+                    <div class="w-fit truncate flex items-center gap-1">
+                      <span class="text-2xl leading-none">•</span>
+                      {{ getHoursAndMinutes(event.dayEventStart) }}
+                      <span class="font-medium">{{ event.title }}</span>
+                    </div>
+                  </template>
+                </UpdateEventDialog>
+              </li>
+            </ul>
+          </div>
         </PopoverContent>
       </Popover>
     </div>
-
-    <!-- TODO render schedule - first (4 or whatever fits) - then show +x more - that shows all events in popover -->
   </div>
 </template>

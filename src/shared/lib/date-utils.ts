@@ -1,3 +1,5 @@
+import { CalendarDate } from "@internationalized/date";
+
 const options = {
   year: "numeric",
   month: "long",
@@ -15,7 +17,23 @@ export function prettifyTimestamp(timestamp: number | string) {
 
 export function getHoursAndMinutes(timestamp: number | string) {
   const date = new Date(timestamp);
-  const hours = date.getUTCHours().toString().padStart(2, "0");
-  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
+export function getDateValueByTimestamp(timestamp: string) {
+  const year = new Date(timestamp).getFullYear();
+  const month = new Date(timestamp).getMonth() + 1; // Months are zero-indexed
+  const day = new Date(timestamp).getDate();
+  return new CalendarDate(year, month, day);
+}
+
+export function getLocalStartTimeByTimestamp(timestamp: string | null) {
+  if (!timestamp) return "00:00";
+
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 }
