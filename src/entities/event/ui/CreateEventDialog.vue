@@ -19,7 +19,7 @@ const isOpened = ref(false);
 <template>
   <Dialog v-model:open="isOpened">
     <DialogTrigger as-child>
-      <slot name="trigger" /> {{ isOpened }}
+      <slot name="trigger" />
     </DialogTrigger>
     <DialogContent>
       <DialogHeader>

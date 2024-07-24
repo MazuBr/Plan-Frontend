@@ -10,6 +10,7 @@ import { eventService } from "../api";
 import { DateValue } from "@internationalized/date";
 import { toast } from "vue-sonner";
 import { prettifyTimestamp } from "@/shared/lib/date-utils";
+import { tanstackQueryClient } from "@/main";
 
 const props = defineProps<{ initialDate?: DateValue }>();
 const emits = defineEmits<{ success: [e: string] }>();
@@ -43,13 +44,13 @@ const form = useForm({
 async function onSubmit(values: GenericObject) {
   const cloneStartDate = structuredClone(values.date) as Date;
   const [startHour, startMinute] = values.startTime.split(":");
-  cloneStartDate.setHours(parseInt(startHour), parseInt(startMinute));
-  const startTime = cloneStartDate.getTime();
+  cloneStartDate.setUTCHours(parseInt(startHour), parseInt(startMinute));
+  const startTime = Math.floor(cloneStartDate.getTime() / 1000);
 
   const cloneEndDate = structuredClone(values.date) as Date;
   const [endHour, endMinute] = values.endTime.split(":");
-  cloneEndDate.setHours(parseInt(endHour), parseInt(endMinute));
-  const endTime = cloneEndDate.getTime();
+  cloneEndDate.setUTCHours(parseInt(endHour), parseInt(endMinute));
+  const endTime = Math.floor(cloneEndDate.getTime() / 1000);
 
   const payload: CalendarCreateEvent = {
     title: values.title,
@@ -58,13 +59,13 @@ async function onSubmit(values: GenericObject) {
     endTime: endTime,
   };
 
-  // const response = await eventService.mutations.createEvent(payload);
+  const response = await eventService.mutations.createEvent(payload);
+  await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] });
 
   const toastMessage = `Событие «${payload.title}», даты ${prettifyTimestamp(
     startTime
   )} - ${prettifyTimestamp(endTime)}`;
 
-  console.log(payload, values.date);
   toast("Событие было создано", {
     description: toastMessage,
     action: {
@@ -72,7 +73,7 @@ async function onSubmit(values: GenericObject) {
       onClick: () => console.log("Абоба"),
     },
   });
-  // emits("success", response.createEvent.title);
+  emits("success", response.createEvent.title);
 }
 </script>
 
