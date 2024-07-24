@@ -29,7 +29,7 @@ npm run dev
 npx swagger-typescript-api -p ./openapi.json -o ./src/shared/api -n restApi.ts --axios --api-class-name RestApi
 ```
 
-2) Graphql
+2) Graphql, требует наличие schema.json в корне проекта
 ```
-WIP
+npx graphql-codegen
 ```
