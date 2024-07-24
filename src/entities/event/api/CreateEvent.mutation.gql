@@ -1,0 +1,6 @@
+mutation CreateEvent($event: CalendarCreateEvent!) {
+  createEvent(input: $event) {
+    title
+    comment
+  }
+}

@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, useSlots } from "vue";
+import {
+  getMonochromeHex,
+  parsedTailwindConfig,
+} from "../lib/tailwind-property-getter";
 
 const props = withDefaults(
   defineProps<{
@@ -18,10 +22,9 @@ defineExpose({
 });
 
 const backgroundColor = computed(() => {
-  if (props.forceDark)
-    return getComputedStyle(document.body).getPropertyValue("--monochrome-9");
+  if (props.forceDark) return getMonochromeHex(9);
 
-  return getComputedStyle(document.body).getPropertyValue("--monochrome-1");
+  return getMonochromeHex(1);
 });
 
 const activeSidebar = ref(props.activeSidebarDefault);
@@ -93,97 +96,94 @@ function setSidebarState(val: boolean | null) {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .ui-layout-container {
   min-height: calc(100dvh - 16px);
   overflow: auto;
   border-radius: 16px;
   width: 100%;
-
   display: flex;
   flex-direction: row;
   gap: 1px;
+}
 
-  & .block-c {
-    display: flex;
-    gap: 3px;
-    flex-wrap: wrap;
-  }
+.ui-layout-container .block-c {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
 
-  main {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 0px;
+.ui-layout-container main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0px;
+  gap: 1px;
+}
 
-    gap: 1px;
+.ui-layout-container main .q-panel {
+  background: unset !important;
+}
 
-    & .q-panel {
-      background: unset !important;
-    }
+.ui-layout-container main .no-bg {
+  background: unset;
+}
 
-    & .no-bg {
-      background: unset;
-    }
+.ui-layout-container main .type-fix {
+  flex-grow: 0 !important;
+  flex-basis: unset !important;
+}
 
-    & .type-fix {
-      flex-grow: 0 !important;
-      flex-basis: unset !important;
-    }
+.ui-layout-container main .no-padding {
+  padding: 0;
+}
 
-    & .no-padding {
-      padding: 0;
-    }
+.ui-layout-container main > div {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  background: v-bind(backgroundColor);
+}
 
-    > div {
-      padding: 1.5rem 1.5rem 1rem 1.5rem;
-      background: v-bind(backgroundColor);
+.ui-layout-container main > div > div:only-child {
+  overflow-x: auto;
+}
 
-      > div:only-child {
-        overflow-x: auto;
-      }
-    }
+.ui-layout-container main > div:last-of-type {
+  flex: 1;
+}
 
-    > div:last-of-type {
-      flex: 1;
-    }
+.ui-layout-container main .type-two {
+  background: local;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1px;
+  padding: unset;
+}
 
-    & .type-two {
-      background: local;
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      gap: 1px;
-      padding: unset;
+.ui-layout-container main .type-two > div {
+  background: v-bind(backgroundColor);
+  flex: 1 0 0;
+}
 
-      > div {
-        background: v-bind(backgroundColor);
-        flex: 1 0 0;
-      }
-    }
-  }
+.ui-layout-container aside {
+  transition: width 0.3s ease-in-out;
+  width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 1px;
+}
 
-  aside {
-    transition: width 0.3s ease-in-out;
-    width: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+.ui-layout-container aside > div {
+  background: v-bind(backgroundColor);
+  display: flex;
+  flex-direction: column;
+}
 
-    gap: 1px;
+.ui-layout-container aside > div:last-child {
+  flex: 1;
+}
 
-    > div {
-      background: v-bind(backgroundColor);
-      display: flex;
-      flex-direction: column;
-    }
-
-    > div:last-child {
-      flex: 1;
-    }
-
-    &.active {
-      width: v-bind(sidebarWidth);
-    }
-  }
+.ui-layout-container aside.active {
+  width: v-bind(sidebarWidth);
 }
 </style>

@@ -3,6 +3,7 @@ import { RefreshTokenResponse, RestApi } from "./restApi";
 import axios, { AxiosResponse } from "axios";
 import { router } from "@/pages/routes/routes";
 import { jwtDecode } from "jwt-decode";
+import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
 const hostAddress = import.meta.env.VITE_API_URL;
 
@@ -12,6 +13,21 @@ export const restClient = new RestApi({
   timeoutErrorMessage: "Лимит в 60 секунд превышен",
   headers: { Accept: "application/json" },
   withCredentials: true,
+});
+
+const requestMiddleware: RequestMiddleware = async (request) => {
+  const token = await requestValidAccessToken();
+  return {
+    ...request,
+    headers: {
+      ...request.headers,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+};
+export const graphqlClient = new GraphQLClient(`${hostAddress}/graphql`, {
+  requestMiddleware,
 });
 
 restClient.instance.interceptors.response.use(
@@ -47,7 +63,6 @@ function isAccessTokenFresh({
 
     // 1721237356
     if (!decodedToken.exp) return false;
-    console.log(decodedToken.exp - nowTime);
 
     return decodedToken.exp > nowTime;
   } catch (e) {
@@ -67,13 +82,13 @@ async function requestValidAccessToken() {
     if (refetchTokenRequestBusy === false) {
       refetchTokenRequestBusy = true;
 
-      const xyz = (
+      const jwt = (
         await restClient.user.refreshTokenUserRefreshTokenPost({
           skipAuth: true,
         })
       ).data.access_token.token;
-      accessToken = xyz;
-      console.log("fresh: ", fresh, xyz);
+      accessToken = jwt;
+      localStorage.setItem("jwt", jwt);
     }
     refetchTokenRequestBusy = false;
 

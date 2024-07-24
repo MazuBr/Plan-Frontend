@@ -45,6 +45,7 @@ const shapes = computed(() => {
     if (!Array.isArray(options) && typeof options === "object")
       options = Object.values(options);
 
+      console.log(item._def.typeName)
     val[name as keyof T] = {
       type: getBaseType(item),
       default: getDefaultValueInZodStack(item),
