@@ -28,6 +28,7 @@ export interface ConfigItem {
   /** Hide `FormLabel`. */
   hideLabel?: boolean
   inputProps?: InputHTMLAttributes
+  disabled?: boolean
 }
 
 // Define a type to unwrap an array

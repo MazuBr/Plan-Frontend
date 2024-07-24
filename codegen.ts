@@ -1,7 +1,8 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: "https://plan-backend-71h9.onrender.com/api/graphql",
+  schema: "./schema.json",
+  // schema: "https://plan-backend-71h9.onrender.com/api/graphql",
   documents: ["src/**/*.gql"],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {

@@ -43,6 +43,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     class="h-full"
     :class="cn('', props.class)"
     v-bind="forwarded"
+    locale="ru"
   >
     <div class="flex gap-3 no-wrap">
       <CalendarHeader class="w-fit gap-3">

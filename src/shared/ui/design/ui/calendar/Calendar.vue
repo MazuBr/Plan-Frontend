@@ -41,6 +41,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-slot="{ grid, weekDays }"
     :class="cn('p-3', props.class)"
     v-bind="forwarded"
+    locale="ru"
   >
     <CalendarHeader>
       <CalendarPrevButton />

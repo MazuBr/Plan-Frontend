@@ -27,11 +27,7 @@ function handleUpdate(event: CalendarRootEmits["update:modelValue"][number]) {
 </script>
 
 <template>
-  <Calendar
-    v-model="computedDate"
-    locale="ru"
-    @update:model-value="handleUpdate"
-  >
+  <Calendar v-model="computedDate" @update:model-value="handleUpdate">
     <template #indicator="{ date }">
       <CalendarEventsIndicator :date="date" />
     </template>

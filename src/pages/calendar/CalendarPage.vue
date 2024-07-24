@@ -9,7 +9,7 @@ import ScheduleMonth from "@/entities/schedule/ui/ScheduleMonth.vue";
     <template #main-content>
       <div class="type-two">
         <div class="type-fix w-80"><Calendar /></div>
-        <div><ScheduleMonth locale="ru" /></div>
+        <div><ScheduleMonth /></div>
       </div>
     </template>
   </DefaultLayout>

@@ -14,11 +14,77 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+};
+
+export type Calendar = {
+  __typename?: 'Calendar';
+  comment: Scalars['String']['output'];
+  endTime: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  repeat: Repeat;
+  startTime: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type CalendarCreateEvent = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  endTime?: InputMaybe<Scalars['Int']['input']>;
+  startTime: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type CalendarEventsByDay = {
+  __typename?: 'CalendarEventsByDay';
+  events: Array<CalendarHumanReadble>;
+};
+
+export type CalendarGetEvents = {
+  endTime: Scalars['Int']['input'];
+  startTime: Scalars['Int']['input'];
+};
+
+export type CalendarHumanReadble = {
+  __typename?: 'CalendarHumanReadble';
+  comment: Scalars['String']['output'];
+  dayEventStart: Scalars['DateTime']['output'];
+  endTime: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  repeat: Repeat;
+  title: Scalars['String']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createEvent: Calendar;
+  createRole: Role;
+};
+
+
+export type MutationCreateEventArgs = {
+  input: CalendarCreateEvent;
+};
+
+
+export type MutationCreateRoleArgs = {
+  input: RoleInput;
 };
 
 export type Query = {
   __typename?: 'Query';
+  calendar: Array<CalendarEventsByDay>;
   roles: Array<Role>;
+};
+
+
+export type QueryCalendarArgs = {
+  input: CalendarGetEvents;
+};
+
+export type Repeat = {
+  __typename?: 'Repeat';
+  isRepeat: Scalars['Boolean']['output'];
+  repeatUntil: Scalars['String']['output'];
 };
 
 export type Role = {
@@ -29,14 +95,4 @@ export type Role = {
 
 export type RoleInput = {
   name: Scalars['String']['input'];
-};
-
-export type UserMutation = {
-  __typename?: 'UserMutation';
-  createRole: Role;
-};
-
-
-export type UserMutationCreateRoleArgs = {
-  input: RoleInput;
 };

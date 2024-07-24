@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import CreateEventDialog from "@/entities/event/ui/CreateEventDialog.vue";
 import type { DateValue } from "@internationalized/date";
 import type { Grid } from "radix-vue/date";
+import ScheduleMonthCell from "./ScheduleMonthCell.vue";
 
 defineProps<{ days: string[]; calendarGrid: Grid<DateValue>[] }>();
 </script>
@@ -15,7 +17,11 @@ defineProps<{ days: string[]; calendarGrid: Grid<DateValue>[] }>();
       v-for="cell in calendarGrid[0].cells"
       class="bg-monochrome-1 text-right hover:bg-monochrome-2"
     >
-      <span class="text-monochrome-7">{{ cell.day }}</span>
+      <CreateEventDialog :initial-date="cell">
+        <template #trigger>
+          <ScheduleMonthCell :day="cell.day.toString()" />
+        </template>
+      </CreateEventDialog>
     </div>
   </div>
 </template>
