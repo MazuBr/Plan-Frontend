@@ -1,12 +1,94 @@
 <script setup lang="ts">
-// TODO get schedule=event[]
-defineProps<{ day: string }>();
+import { getHoursAndMinutes } from "@/shared/lib/date-utils";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/shared/ui/design/ui/popover";
+import { CalendarData } from "../api";
+import { ref } from "vue";
+import Button from "@/shared/ui/design/ui/button/Button.vue";
+import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue";
+
+withDefaults(
+  defineProps<{
+    day: string;
+    events: CalendarData["events"];
+    fullDay: string;
+  }>(),
+  {
+    events: () => [],
+  }
+);
+
+const popoverOpened = ref(false);
 </script>
 
 <template>
-  <div class="h-full">
-    <span class="text-monochrome-7">{{ day }}</span>
+  <div class="h-full flex flex-col justify-between py-2 pr-2">
+    <div>
+      <div class="text-right">
+        <span class="text-monochrome-7">{{ day }}</span>
+      </div>
 
-    <!-- TODO render schedule - first (4 or whatever fits) - then show +x more - that shows all events in popover -->
+      <div @click.stop>
+        <ul class="text-left text-sm">
+          <li
+            v-for="event in events?.slice(0, 3)"
+            class="cursor-pointer hover:text-blue-400"
+          >
+            <UpdateEventDialog :event-data="event">
+              <template #trigger>
+                <div class="truncate flex items-center gap-1">
+                  <span class="text-2xl leading-none">•</span>
+                  {{ getHoursAndMinutes(event.dayEventStart) }}
+                  <span class="font-medium">{{ event.title }}</span>
+                </div>
+              </template>
+            </UpdateEventDialog>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div @click.stop>
+      <Popover v-model:open="popoverOpened">
+        <PopoverTrigger>
+          <div
+            v-if="events?.length > 3"
+            class="cursor-pointer hover:text-blue-400"
+          >
+            + ещё {{ events?.length - 3 }}
+          </div>
+        </PopoverTrigger>
+        <PopoverContent :side-offset="-100">
+          <div class="flex justify-between flex-nowrap items-start">
+            <div class="text-lg font-medium">{{ fullDay }}</div>
+            <Button size="xs" variant="ghost" @click="popoverOpened = false"
+              >x</Button
+            >
+          </div>
+
+          <div @click.stop>
+            <ul class="text-left text-sm">
+              <li
+                v-for="event in events"
+                class="cursor-pointer hover:text-blue-400"
+              >
+                <UpdateEventDialog :event-data="event">
+                  <template #trigger>
+                    <div class="w-fit truncate flex items-center gap-1">
+                      <span class="text-2xl leading-none">•</span>
+                      {{ getHoursAndMinutes(event.dayEventStart) }}
+                      <span class="font-medium">{{ event.title }}</span>
+                    </div>
+                  </template>
+                </UpdateEventDialog>
+              </li>
+            </ul>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   </div>
 </template>

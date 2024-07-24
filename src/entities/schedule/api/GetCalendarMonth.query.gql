@@ -1,0 +1,12 @@
+query GetCalendarMonth($epochStart: Int!, $epochEnd: Int!) {
+  calendar(input: { endTime: $epochEnd, startTime: $epochStart }) {
+    day
+    events {
+      id
+      title
+      comment
+      dayEventStart
+      endTime
+    }
+  }
+}

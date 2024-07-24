@@ -1,6 +1,11 @@
 import { graphqlClient } from "@/shared/api/base";
-import { CalendarCreateEvent } from "@/shared/api/gql/graphql";
+import {
+  CalendarCreateEvent,
+  CalendaUpdateEvents,
+} from "@/shared/api/gql/graphql";
 import { CreateEventDocument } from "./CreateEvent.mutation.generated";
+import { DeleteEventsDocument } from "./DeleteEvents.mutation.generated";
+import { UpdateEventDocument } from "./UpdateEvent.mutation.generated";
 
 export const eventService = {
   getters: {},
@@ -8,6 +13,16 @@ export const eventService = {
   mutations: {
     async createEvent(input: CalendarCreateEvent) {
       return await graphqlClient.request(CreateEventDocument, { event: input });
+    },
+
+    async updateEvent(input: CalendaUpdateEvents) {
+      return await graphqlClient.request(UpdateEventDocument, { input });
+    },
+
+    async deleteEvents(eventIds: number[]) {
+      return await graphqlClient.request(DeleteEventsDocument, {
+        ids: eventIds,
+      });
     },
   },
 };

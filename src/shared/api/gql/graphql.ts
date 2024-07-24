@@ -14,13 +14,31 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
   DateTime: { input: any; output: any; }
+};
+
+export type CalendaDeleteEvents = {
+  eventId: Array<Scalars['Int']['input']>;
+};
+
+export type CalendaDeleteEventsResponse = {
+  __typename?: 'CalendaDeleteEventsResponse';
+  ids: Array<Scalars['Int']['output']>;
+};
+
+export type CalendaUpdateEvents = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  endTime?: InputMaybe<Scalars['Int']['input']>;
+  eventId: Scalars['Int']['input'];
+  startTime?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Calendar = {
   __typename?: 'Calendar';
-  comment: Scalars['String']['output'];
-  endTime: Scalars['Int']['output'];
+  comment?: Maybe<Scalars['String']['output']>;
+  endTime?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
   repeat: Repeat;
   startTime: Scalars['Int']['output'];
@@ -36,7 +54,8 @@ export type CalendarCreateEvent = {
 
 export type CalendarEventsByDay = {
   __typename?: 'CalendarEventsByDay';
-  events: Array<CalendarHumanReadble>;
+  day: Scalars['Date']['output'];
+  events: Array<CalendarHumanReadable>;
 };
 
 export type CalendarGetEvents = {
@@ -44,11 +63,11 @@ export type CalendarGetEvents = {
   startTime: Scalars['Int']['input'];
 };
 
-export type CalendarHumanReadble = {
-  __typename?: 'CalendarHumanReadble';
-  comment: Scalars['String']['output'];
+export type CalendarHumanReadable = {
+  __typename?: 'CalendarHumanReadable';
+  comment?: Maybe<Scalars['String']['output']>;
   dayEventStart: Scalars['DateTime']['output'];
-  endTime: Scalars['DateTime']['output'];
+  endTime?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
   repeat: Repeat;
   title: Scalars['String']['output'];
@@ -57,7 +76,8 @@ export type CalendarHumanReadble = {
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Calendar;
-  createRole: Role;
+  deleteEvent: CalendaDeleteEventsResponse;
+  updateEvent: UpdatedEvent;
 };
 
 
@@ -66,13 +86,19 @@ export type MutationCreateEventArgs = {
 };
 
 
-export type MutationCreateRoleArgs = {
-  input: RoleInput;
+export type MutationDeleteEventArgs = {
+  input: CalendaDeleteEvents;
+};
+
+
+export type MutationUpdateEventArgs = {
+  input: CalendaUpdateEvents;
 };
 
 export type Query = {
   __typename?: 'Query';
   calendar: Array<CalendarEventsByDay>;
+  calendarEpoch: Array<Calendar>;
   roles: Array<Role>;
 };
 
@@ -81,10 +107,15 @@ export type QueryCalendarArgs = {
   input: CalendarGetEvents;
 };
 
+
+export type QueryCalendarEpochArgs = {
+  input: CalendarGetEvents;
+};
+
 export type Repeat = {
   __typename?: 'Repeat';
-  isRepeat: Scalars['Boolean']['output'];
-  repeatUntil: Scalars['String']['output'];
+  isRepeat?: Maybe<Scalars['Boolean']['output']>;
+  repeatUntil?: Maybe<Scalars['String']['output']>;
 };
 
 export type Role = {
@@ -93,6 +124,11 @@ export type Role = {
   name: Scalars['String']['output'];
 };
 
-export type RoleInput = {
-  name: Scalars['String']['input'];
+export type UpdatedEvent = {
+  __typename?: 'UpdatedEvent';
+  comment?: Maybe<Scalars['String']['output']>;
+  endTime?: Maybe<Scalars['Int']['output']>;
+  eventId: Scalars['Int']['output'];
+  startTime?: Maybe<Scalars['Int']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
 };

@@ -1,0 +1,5 @@
+mutation DeleteEvents($ids: [Int!]!) {
+  deleteEvent(input: { eventId: $ids }) {
+    ids
+  }
+}

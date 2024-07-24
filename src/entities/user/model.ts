@@ -16,7 +16,7 @@ export const useSessionState = createGlobalState(() => {
       })
     ).data;
     user.value = createUserData;
-    router.push({ name: "dashboard" });
+    router.push({ name: "home" });
   }
 
   async function checkSession() {
@@ -32,7 +32,7 @@ export const useSessionState = createGlobalState(() => {
 
     // TODO resume session properly
     if (router.currentRoute.value.fullPath.includes("/login")) {
-      router.push({ name: "dashboard" });
+      router.push({ name: "home" });
     }
 
     await checkSession();
