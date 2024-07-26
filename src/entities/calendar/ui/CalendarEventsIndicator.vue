@@ -1,29 +1,10 @@
 <script setup lang="ts">
-import { tanstackQueryClient } from "@/main";
-import { QueryCacheNotifyEvent } from "@tanstack/vue-query";
-import { computed, onUnmounted, ref, watch } from "vue";
+import { getDayEvents } from "@/entities/schedule/model";
+import { computed } from "vue";
 
 const props = defineProps<{ date: string }>();
 
-const eventCount = ref(0);
-
-function isObjectWithDayProperty(value: unknown): value is { day: string } {
-  if (typeof value === "object" && value !== null) {
-    const obj = value as Record<string, unknown>;
-
-    return "day" in obj && typeof obj.day === "string";
-  }
-  return false;
-}
-
-function deriveEventCountFromCacheData(ev: QueryCacheNotifyEvent) {
-  if (!ev.query.queryKey?.includes("calendar")) return;
-
-  const eventData = ev.query.state.data?.find((ev: unknown) =>
-    isObjectWithDayProperty(ev) ? ev.day === props.date : false
-  )?.events.length;
-  eventCount.value = eventData;
-}
+const eventCount = computed(() => getDayEvents(props.date).length);
 
 function colorCodeByEventCount(count: number) {
   if (!count) return "bg-transparent";
@@ -36,12 +17,6 @@ function colorCodeByEventCount(count: number) {
 
   return "bg-warning";
 }
-
-const unsub = tanstackQueryClient
-  .getQueryCache()
-  .subscribe(deriveEventCountFromCacheData);
-
-onUnmounted(unsub);
 </script>
 
 <template>

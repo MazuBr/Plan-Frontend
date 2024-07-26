@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Calendar } from "@/shared/ui/design/ui/calendar";
-import { computed } from "vue";
+import { Calendar, currentCalendarGrid } from "@/shared/ui/design/ui/calendar";
+import { computed, watch } from "vue";
 import { useRouteQuery } from "@vueuse/router";
 import { parseDate } from "@internationalized/date";
 import { type CalendarRootEmits } from "radix-vue";
 import CalendarEventsIndicator from "./CalendarEventsIndicator.vue";
+import { useFetchScheduleForCalendar } from "@/entities/schedule/model";
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -24,6 +25,7 @@ function handleUpdate(event: CalendarRootEmits["update:modelValue"][number]) {
   if (computedValue === selectedDate.value) return;
   selectedDate.value = computedValue;
 }
+useFetchScheduleForCalendar(currentCalendarGrid);
 </script>
 
 <template>

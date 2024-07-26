@@ -4,44 +4,22 @@ import type { DateValue } from "@internationalized/date";
 import type { Grid } from "radix-vue/date";
 import ScheduleMonthCell from "./ScheduleMonthCell.vue";
 import { useQuery } from "@tanstack/vue-query";
-import { computed } from "vue";
+import { computed, toRef } from "vue";
 import { scheduleService } from "../api";
+import { getDayEvents, useFetchScheduleForCalendar } from "../model";
 
 const props = defineProps<{
   days: string[];
   calendarGrid: Grid<DateValue>[];
 }>();
 
-const computedStartEndEpoch = computed(() => {
-  const epochStart = Math.floor(
-    new Date(props.calendarGrid[0].cells[0].toString()).getTime() / 1000
-  );
-  const epochEnd = Math.floor(
-    new Date(props.calendarGrid[0].cells[34].toString()).getTime() / 1000
-  );
-
-  return [epochStart, epochEnd] as const;
-});
-
-const { data: groupedEvents, isLoading } = useQuery({
-  queryKey: ["calendar", "month", computedStartEndEpoch],
-  queryFn: () =>
-    scheduleService.getters.getScheduleForMonth(
-      computedStartEndEpoch.value[0],
-      computedStartEndEpoch.value[1]
-    ),
-});
-
-function getDayEvents(cell: DateValue) {
-  return groupedEvents.value?.find((group) => group.day === cell.toString())
-    ?.events;
-}
+const { scheduleQuery } = useFetchScheduleForCalendar(() => props.calendarGrid);
 </script>
 
 <template>
   <div
     class="calendar-grid h-full bg-monochrome-2"
-    :class="isLoading ? 'opacity-50' : 'opacity-100'"
+    :class="scheduleQuery.isLoading.value ? 'opacity-50' : 'opacity-100'"
   >
     <div v-for="day in days" :key="day" class="bg-monochrome-2 text-center">
       {{ day }}
