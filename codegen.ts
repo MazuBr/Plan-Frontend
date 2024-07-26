@@ -31,6 +31,11 @@ const config: CodegenConfig = {
             avoidOptionals: true,
           },
         },
+        {
+          add: {
+            content: "/* eslint-disable */\n// prettier-ignore",
+          },
+        },
         "typed-document-node",
       ],
     },

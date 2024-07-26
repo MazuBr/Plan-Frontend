@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { tanstackQueryClient } from "@/main";
 import { QueryCacheNotifyEvent } from "@tanstack/vue-query";
-import { computed, ref, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps<{ date: string }>();
 
@@ -37,9 +37,11 @@ function colorCodeByEventCount(count: number) {
   return "bg-warning";
 }
 
-const sub = tanstackQueryClient
+const unsub = tanstackQueryClient
   .getQueryCache()
   .subscribe(deriveEventCountFromCacheData);
+
+onUnmounted(unsub);
 </script>
 
 <template>

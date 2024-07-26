@@ -18,10 +18,10 @@ const computedDate = computed({
 });
 
 function handleUpdate(event: CalendarRootEmits["update:modelValue"][number]) {
-  const computedValue = event?.toString() || today;
+  if (!event) return; // Убрать возможность сброса значения
 
+  const computedValue = event.toString() || today;
   if (computedValue === selectedDate.value) return;
-
   selectedDate.value = computedValue;
 }
 </script>

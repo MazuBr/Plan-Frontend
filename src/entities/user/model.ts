@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { createGlobalState } from "@vueuse/core";
 import { router } from "../../pages/routes/routes";
 import { restClient } from "@/shared/api/base";

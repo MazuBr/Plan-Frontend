@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type * as z from 'zod'
 import type { Ref } from 'vue'
 import { computed, ref, watch } from 'vue'

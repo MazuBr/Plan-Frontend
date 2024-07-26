@@ -22,6 +22,19 @@ export function getHoursAndMinutes(timestamp: number | string) {
   return `${hours}:${minutes}`;
 }
 
+export function determineIfSameMonth(
+  dateA: string | number,
+  dateB: string | number
+) {
+  const dateObjA = new Date(dateA);
+  const dateObjB = new Date(dateB);
+
+  return (
+    dateObjA.getFullYear() === dateObjB.getFullYear() &&
+    dateObjA.getMonth() === dateObjB.getMonth()
+  );
+}
+
 export function getDateValueByTimestamp(timestamp: string) {
   const year = new Date(timestamp).getFullYear();
   const month = new Date(timestamp).getMonth() + 1; // Months are zero-indexed

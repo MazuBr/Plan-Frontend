@@ -7,13 +7,6 @@ import {
   useForwardPropsEmits,
 } from "radix-vue";
 import {
-  CalendarCell,
-  CalendarCellTrigger,
-  CalendarGrid,
-  CalendarGridBody,
-  CalendarGridHead,
-  CalendarGridRow,
-  CalendarHeadCell,
   CalendarHeader,
   CalendarHeading,
   CalendarNextButton,
@@ -45,7 +38,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     locale="ru"
   >
-    <div class="flex gap-3 no-wrap">
+    <div class="flex gap-3 no-wrap justify-between">
       <CalendarHeader class="w-fit gap-3">
         <CalendarPrevButton />
         <CalendarHeading class="text-xl" />
@@ -53,12 +46,12 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       </CalendarHeader>
 
       <div>
-        <span class="italic">выбор месяц/неделя/день</span>
+        <slot name="schedule-handler" />
       </div>
     </div>
 
     <ScheduleMonthGrid
-      style="height: calc(100% - 34px)"
+      style="height: calc(100% - 40px)"
       :days="weekDays"
       :calendar-grid="grid"
     />

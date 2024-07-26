@@ -1,7 +1,6 @@
 import { useSessionState } from "@/entities/user/model";
-import { RefreshTokenResponse, RestApi } from "./restApi";
-import axios, { AxiosResponse } from "axios";
-import { router } from "@/pages/routes/routes";
+import { RestApi } from "./restApi";
+import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
@@ -35,7 +34,6 @@ restClient.instance.interceptors.response.use(
     return response;
   },
   async (err) => {
-    const session = useSessionState();
     if (axios.isAxiosError(err)) {
       if (err.message === "Network Error" || err.request.status === 401) {
         useSessionState().isAuth.value = false;

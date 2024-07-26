@@ -1,3 +1,5 @@
+/* eslint-disable */
+// prettier-ignore
 import * as Types from '../../../shared/api/gql/graphql';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';

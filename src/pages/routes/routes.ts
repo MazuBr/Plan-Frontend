@@ -58,7 +58,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: "/",
+    path: "/:mode?",
     name: "home",
     component: () => import("../calendar/CalendarPage.vue"),
   },

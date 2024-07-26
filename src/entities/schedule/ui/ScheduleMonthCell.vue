@@ -9,8 +9,9 @@ import { CalendarData } from "../api";
 import { ref } from "vue";
 import Button from "@/shared/ui/design/ui/button/Button.vue";
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue";
+import { LocationQuery, parseQuery } from "vue-router";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     day: string;
     events: CalendarData["events"];
@@ -22,10 +23,18 @@ withDefaults(
 );
 
 const popoverOpened = ref(false);
+
+function applySelection(query: LocationQuery) {
+  if (props.fullDay === query.date)
+    return "border border-monochrome-6 rounded-md";
+}
 </script>
 
 <template>
-  <div class="h-full flex flex-col justify-between py-2 pr-2">
+  <div
+    :class="applySelection($route.query)"
+    class="h-full flex flex-col justify-between py-2 pr-2"
+  >
     <div>
       <div class="text-right">
         <span class="text-monochrome-7">{{ day }}</span>
