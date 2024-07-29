@@ -1,5 +1,7 @@
-query GetCalendarMonth($epochStart: Int!, $epochEnd: Int!) {
-  calendar(input: { endTime: $epochEnd, startTime: $epochStart }) {
+query GetCalendarMonth($epochStart: Int!, $epochEnd: Int!, $tz: String!) {
+  calendar(
+    input: { endTime: $epochEnd, startTime: $epochStart, timeZone: $tz }
+  ) {
     day
     events {
       id

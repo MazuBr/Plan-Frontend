@@ -13,10 +13,15 @@ export type CalendarData = DeepExtractTypeSkipArrays<
 
 export const scheduleService = {
   getters: {
-    async getScheduleForMonth(epochStart: number, epochEnd: number) {
+    async getScheduleForMonth(
+      epochStart: number,
+      epochEnd: number,
+      tz: string
+    ) {
       const data = await graphqlClient.request(GetCalendarMonthDocument, {
         epochStart,
         epochEnd,
+        tz,
       })
 
       return data.calendar
