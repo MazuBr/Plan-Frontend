@@ -8,6 +8,7 @@ import {
   SelectItem,
 } from "@/shared/ui/design/ui/select"
 import { useScheduleMode } from "../model"
+import SelectGroup from "@/shared/ui/design/ui/select/SelectGroup.vue"
 
 const scheduleMode = useScheduleMode()
 </script>
