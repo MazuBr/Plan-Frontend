@@ -15,3 +15,7 @@ watch(
   }
 )
 </script>
+
+<template>
+  <span></span>
+</template>
