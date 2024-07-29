@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   CalendarCreateEvent,
-  CalendaUpdateEvents,
+  CalendaUpdateEvents as CalendarUpdateEvents,
 } from "@/shared/api/gql/graphql"
 import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
 import { AutoForm } from "@/shared/ui/design/ui/auto-form"
@@ -9,19 +9,16 @@ import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { toTypedSchema } from "@vee-validate/zod"
 import { GenericObject, useForm } from "vee-validate"
 import { z } from "zod"
-import { eventService } from "../api"
 import { DateValue } from "@internationalized/date"
-import { toast } from "vue-sonner"
 import {
   getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
-  prettifyTimestamp,
 } from "@/shared/lib/date-utils"
-import { tanstackQueryClient } from "@/main"
 import { CalendarData } from "@/entities/schedule/api"
 import DeleteEventTrigger from "./DeleteEventTrigger.vue"
 import { useIsMutating } from "@tanstack/vue-query"
 import { computed, onMounted } from "vue"
+import { useEventsModel } from "../model"
 
 const props = defineProps<{
   initialDate?: DateValue
@@ -83,6 +80,10 @@ const form = useForm({
   validationSchema: toTypedSchema(formSchema),
 })
 
+const { asyncCreateEventMutation, asyncUpdateEventMutation } = useEventsModel(
+  props.eventData?.id
+)
+
 async function onSubmit(values: GenericObject) {
   const cloneStartDate = structuredClone(values.date) as Date
   const [startHour, startMinute] = values.startTime.split(":")
@@ -94,7 +95,7 @@ async function onSubmit(values: GenericObject) {
   cloneEndDate.setHours(parseInt(endHour), parseInt(endMinute))
   const endTime = Math.floor(cloneEndDate.getTime() / 1000)
 
-  const payload: CalendarCreateEvent = {
+  const createPayload: CalendarCreateEvent = {
     title: values.title,
     comment: values.comment,
     startTime: startTime,
@@ -102,49 +103,22 @@ async function onSubmit(values: GenericObject) {
   }
 
   if (!props.eventData) {
-    // TODO handle create
-    const response = await eventService.mutations.createEvent(payload)
-    await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
-
-    const toastMessage = `Событие «${payload.title}», даты ${prettifyTimestamp(
-      startTime
-    )} - ${prettifyTimestamp(endTime)}`
-
-    toast("Событие было создано", {
-      description: toastMessage,
-      action: {
-        label: "Абоба",
-        onClick: () => console.log("Абоба"),
-      },
+    await asyncCreateEventMutation(createPayload, {
+      onSuccess: () => emits("success", createPayload.title),
     })
-    emits("success", response.createEvent.title)
     return
   }
 
-  // TODO handle update
-
-  const payload2: CalendaUpdateEvents = {
+  const updatePayload: CalendarUpdateEvents = {
     eventId: props.eventData.id,
     title: values.title,
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
   }
-  const response = await eventService.mutations.updateEvent(payload2)
-  await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
-
-  const toastMessage = `Событие «${payload.title}», даты ${prettifyTimestamp(
-    startTime
-  )} - ${prettifyTimestamp(endTime)}`
-
-  toast("Событие было обновлено", {
-    description: toastMessage,
-    action: {
-      label: "Абоба",
-      onClick: () => console.log("Абоба"),
-    },
+  await asyncUpdateEventMutation(updatePayload, {
+    onSuccess: () => emits("success", updatePayload.title || ""),
   })
-  emits("success", "")
 }
 
 const isDeletingEvent = useIsMutating({

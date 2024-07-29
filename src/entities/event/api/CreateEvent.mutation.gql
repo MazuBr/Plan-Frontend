@@ -1,5 +1,6 @@
 mutation CreateEvent($event: CalendarCreateEvent!) {
   createEvent(input: $event) {
+    id
     title
     comment
   }

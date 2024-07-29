@@ -4,6 +4,7 @@ import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { GraphQLClient, RequestMiddleware } from "graphql-request"
 import { toast } from "vue-sonner"
+import { getErrorInfo } from "../lib/error-analyzer"
 
 const hostAddress = import.meta.env.VITE_API_URL
 
@@ -34,6 +35,9 @@ restClient.instance.interceptors.response.use(
     return response
   },
   async (err) => {
+    const { description, header } = getErrorInfo(err)
+    toast.error(header, { description, position: "top-center" })
+
     if (axios.isAxiosError(err)) {
       if (err.message === "Network Error" || err.request.status === 401) {
         useSessionState().isAuth.value = false
@@ -84,7 +88,9 @@ async function requestValidAccessToken() {
         withCredentials: true,
       })
       toast.promise(promise, {
-        loading: "Идёт обновление сессии",
+        loading: "Автоматическое продление сессии",
+        description: "Работа вскоре возобновится",
+        position: "top-center",
         success(data) {
           const jwt = data.data.access_token.token
           accessToken = jwt

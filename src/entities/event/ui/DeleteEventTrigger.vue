@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query"
-import { eventService } from "../api"
 import {
   Popover,
   PopoverContent,
@@ -8,32 +6,26 @@ import {
 } from "@/shared/ui/design/ui/popover"
 import { Button } from "@/shared/ui/design"
 import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
-import { tanstackQueryClient } from "@/main"
+import { useEventsModel } from "../model"
 
 const props = defineProps<{ id: number }>()
 const emits = defineEmits<{ success: [] }>()
 
-const { mutate, isPending } = useMutation({
-  mutationKey: ["deleteEvent", props.id],
-
-  mutationFn: (eventIds: number[]) =>
-    eventService.mutations.deleteEvents(eventIds),
-
-  onSuccess: () => {
-    emits("success")
-    return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
-  },
-})
+const { deleteEventMutation, isPendingEventMutation } = useEventsModel(props.id)
 </script>
 
 <template>
   <Popover>
     <PopoverTrigger as-child>
-      <Button variant="destructive" :disabled="isPending" type="button">
+      <Button
+        variant="destructive"
+        :disabled="isPendingEventMutation"
+        type="button"
+      >
         <AnimatedText
           text="Удаление"
           active-text="Подождите"
-          :active="isPending"
+          :active="isPendingEventMutation"
         ></AnimatedText>
       </Button>
     </PopoverTrigger>
@@ -41,10 +33,14 @@ const { mutate, isPending } = useMutation({
     <PopoverContent>
       Вы уверены?
       <Button
-        :disabled="isPending"
+        :disabled="isPendingEventMutation"
         class="text-error-1"
         variant="ghost"
-        @click="mutate([id])"
+        @click="
+          deleteEventMutation([id], {
+            onSuccess: () => emits('success'),
+          })
+        "
         >Да</Button
       >
     </PopoverContent>

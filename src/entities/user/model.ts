@@ -26,6 +26,7 @@ export const useSessionState = createGlobalState(() => {
   async function login(payload: LoginRequest) {
     const data = await restClient.user.loginUserLoginPost(payload, {
       skipAuth: true,
+      withCredentials: true
     })
     localStorage.setItem("jwt", data.data.access_token.token)
     isAuth.value = true

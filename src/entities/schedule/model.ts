@@ -20,6 +20,15 @@ export function getDayEvents(cell: DateValue | string) {
   return dayEventsMap.value.get(cell.toString()) || []
 }
 
+export function removeManualEventById(id: number) {
+  for (const ev of dayEventsMap.value.values()) {
+    const idx = ev.findIndex((v) => v.id === id)
+    if (idx !== -1) {
+      ev.splice(idx, 1)
+    }
+  }
+}
+
 export const dayEventsMap = ref(new Map<string, CalendarData["events"]>())
 
 export const useFetchScheduleForCalendar = (
@@ -42,7 +51,12 @@ export const useFetchScheduleForCalendar = (
         computedStartEndEpoch.value[0],
         computedStartEndEpoch.value[1]
       ),
+    enabled: () =>
+      !!(computedStartEndEpoch.value[0] && computedStartEndEpoch.value[1]),
     staleTime: 60_000,
+    meta: {
+      context: "Процедура получения расписания",
+    },
   })
 
   watch(
