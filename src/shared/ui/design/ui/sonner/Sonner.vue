@@ -13,7 +13,7 @@ const props = defineProps<ToasterProps>()
       classes: {
         toast:
           'group toast group-[.toaster]:bg-monochrome-1.5  group-[.toaster]:border-monochrome-6 group-[.toaster]:shadow-sm group-[.toaster]:max-w-[500px]',
-        title: 'text-nowrap',
+        // title: 'text-nowrap',
         description: 'group-[.toast]:text-muted-foreground line-clamp-4',
         actionButton:
           'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',

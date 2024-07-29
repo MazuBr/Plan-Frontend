@@ -34,6 +34,8 @@ export const dayEventsMap = ref(new Map<string, CalendarData["events"]>())
 export const useFetchScheduleForCalendar = (
   calendar: MaybeRefOrGetter<Grid<DateValue>[]>
 ) => {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+
   const computedStartEndEpoch = computed(() => {
     const cells = toValue(calendar)[0]?.cells || []
     const firstDate = new Date(cells.at(0)?.toString() || "")
@@ -45,11 +47,12 @@ export const useFetchScheduleForCalendar = (
   })
 
   const scheduleQuery = useQuery({
-    queryKey: ["calendar", computedStartEndEpoch],
+    queryKey: ["calendar", computedStartEndEpoch, tz], // Вероятно зависимость от tz тут лишняя
     queryFn: () =>
       scheduleService.getters.getScheduleForMonth(
         computedStartEndEpoch.value[0],
-        computedStartEndEpoch.value[1]
+        computedStartEndEpoch.value[1],
+        tz
       ),
     enabled: () =>
       !!(computedStartEndEpoch.value[0] && computedStartEndEpoch.value[1]),

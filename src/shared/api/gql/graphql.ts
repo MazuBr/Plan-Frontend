@@ -43,6 +43,7 @@ export type Calendar = {
   repeat: Repeat;
   startTime: Scalars['Int']['output'];
   title: Scalars['String']['output'];
+  userData: EventUserRole;
 };
 
 export type CalendarCreateEvent = {
@@ -61,6 +62,7 @@ export type CalendarEventsByDay = {
 export type CalendarGetEvents = {
   endTime: Scalars['Int']['input'];
   startTime: Scalars['Int']['input'];
+  timeZone: Scalars['String']['input'];
 };
 
 export type CalendarHumanReadable = {
@@ -71,6 +73,12 @@ export type CalendarHumanReadable = {
   id: Scalars['Int']['output'];
   repeat: Repeat;
   title: Scalars['String']['output'];
+};
+
+export type EventUserRole = {
+  __typename?: 'EventUserRole';
+  userId: Scalars['Int']['output'];
+  userRole: Scalars['String']['output'];
 };
 
 export type Mutation = {
