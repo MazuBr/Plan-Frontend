@@ -3,6 +3,7 @@ import { RestApi } from "./restApi"
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { GraphQLClient, RequestMiddleware } from "graphql-request"
+import { toast } from "vue-sonner"
 
 const hostAddress = import.meta.env.VITE_API_URL
 
@@ -58,7 +59,6 @@ function isAccessTokenFresh({
   try {
     const decodedToken = jwtDecode(token)
 
-    // 1721237356
     if (!decodedToken.exp) return false
 
     return decodedToken.exp > nowTime
@@ -79,16 +79,25 @@ async function requestValidAccessToken() {
     if (refetchTokenRequestBusy === false) {
       refetchTokenRequestBusy = true
 
-      const jwt = (
-        await restClient.user.refreshTokenUserRefreshTokenPost({
-          skipAuth: true,
-          withCredentials: true,
-        })
-      ).data.access_token.token
-      accessToken = jwt
-      localStorage.setItem("jwt", jwt)
+      const promise = restClient.user.refreshTokenUserRefreshTokenPost({
+        skipAuth: true,
+        withCredentials: true,
+      })
+      toast.promise(promise, {
+        loading: "Идёт обновление сессии",
+        success(data) {
+          const jwt = data.data.access_token.token
+          accessToken = jwt
+          localStorage.setItem("jwt", jwt)
+          refetchTokenRequestBusy = false
+          return "Сессия обновлена"
+        },
+        error: () => {
+          refetchTokenRequestBusy = false
+          return "Обновление сессии закончилась неудачно"
+        },
+      })
     }
-    refetchTokenRequestBusy = false
 
     if (!accessToken) {
       session.logoutWithoutRequest()
