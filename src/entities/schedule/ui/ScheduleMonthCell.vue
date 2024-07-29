@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { getHoursAndMinutes } from "@/shared/lib/date-utils";
+import { getHoursAndMinutes } from "@/shared/lib/date-utils"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/shared/ui/design/ui/popover";
-import { CalendarData } from "../api";
-import { ref } from "vue";
-import Button from "@/shared/ui/design/ui/button/Button.vue";
-import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue";
-import { LocationQuery, parseQuery } from "vue-router";
+} from "@/shared/ui/design/ui/popover"
+import { CalendarData } from "../api"
+import { ref } from "vue"
+import Button from "@/shared/ui/design/ui/button/Button.vue"
+import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
+import { LocationQuery, parseQuery } from "vue-router"
 
 const props = withDefaults(
   defineProps<{
-    day: string;
-    events: CalendarData["events"];
-    fullDay: string;
+    day: string
+    events: CalendarData["events"]
+    fullDay: string
   }>(),
   {
     events: () => [],
   }
-);
+)
 
-const popoverOpened = ref(false);
+const popoverOpened = ref(false)
 
 function applySelection(query: LocationQuery) {
   if (props.fullDay === query.date)
-    return "border border-monochrome-6 rounded-md";
+    return "border border-monochrome-6 rounded-md"
 }
 </script>
 

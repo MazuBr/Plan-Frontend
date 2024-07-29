@@ -5,14 +5,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/design/ui/dialog";
-import EventForm from "./EventForm.vue";
-import { ref } from "vue";
-import { DateValue } from "@internationalized/date";
+} from "@/shared/ui/design/ui/dialog"
+import EventForm from "./EventForm.vue"
+import { ref } from "vue"
+import { DateValue } from "@internationalized/date"
 
-defineProps<{ initialDate?: DateValue }>();
+defineProps<{ initialDate?: DateValue }>()
 
-const isOpened = ref(false);
+const isOpened = ref(false)
 </script>
 
 <template>

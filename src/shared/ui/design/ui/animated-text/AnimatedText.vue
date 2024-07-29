@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from "vue"
 const props = defineProps<{
-  active?: boolean;
-  text: string;
-  activeText?: string;
-}>();
+  active?: boolean
+  text: string
+  activeText?: string
+}>()
 
 const textContent = computed(() =>
   props.active ? props.activeText || props.text : props.text
-);
+)
 </script>
 
 <template>

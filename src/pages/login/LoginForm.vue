@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useSessionState } from "@/entities/user/model";
-import { LoginRequest } from "@/shared/api/restApi";
+import { useSessionState } from "@/entities/user/model"
+import { LoginRequest } from "@/shared/api/restApi"
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@/shared/ui/design/ui/alert";
-import { AnimatedText } from "@/shared/ui/design/ui/animated-text";
-import { AutoForm } from "@/shared/ui/design/ui/auto-form";
-import Button from "@/shared/ui/design/ui/button/Button.vue";
-import { toTypedSchema } from "@vee-validate/zod";
-import { GenericObject, useForm } from "vee-validate";
-import { ref } from "vue";
-import { z } from "zod";
+} from "@/shared/ui/design/ui/alert"
+import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
+import { AutoForm } from "@/shared/ui/design/ui/auto-form"
+import Button from "@/shared/ui/design/ui/button/Button.vue"
+import { toTypedSchema } from "@vee-validate/zod"
+import { GenericObject, useForm } from "vee-validate"
+import { ref } from "vue"
+import { z } from "zod"
 
 const formSchema = z.object({
   identifier: z
@@ -21,20 +21,20 @@ const formSchema = z.object({
   password: z
     .string({ required_error: "Пароль обязателен" })
     .describe("Пароль"),
-});
+})
 
 const form = useForm({
   validationSchema: toTypedSchema(formSchema),
-});
+})
 
-const error = ref("");
-const session = useSessionState();
+const error = ref("")
+const session = useSessionState()
 async function onSubmit(values: GenericObject) {
   try {
-    error.value = "";
-    await session.login(values as LoginRequest);
+    error.value = ""
+    await session.login(values as LoginRequest)
   } catch (e) {
-    error.value = (e as any)?.response?.data?.detail;
+    error.value = (e as any)?.response?.data?.detail
   }
 }
 </script>

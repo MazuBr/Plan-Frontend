@@ -6,10 +6,10 @@ import {
   SelectValue,
   SelectLabel,
   SelectItem,
-} from "@/shared/ui/design/ui/select";
-import { useScheduleMode } from "../model";
+} from "@/shared/ui/design/ui/select"
+import { useScheduleMode } from "../model"
 
-const scheduleMode = useScheduleMode();
+const scheduleMode = useScheduleMode()
 </script>
 
 <template>

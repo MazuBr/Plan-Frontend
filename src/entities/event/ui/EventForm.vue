@@ -2,33 +2,33 @@
 import {
   CalendarCreateEvent,
   CalendaUpdateEvents,
-} from "@/shared/api/gql/graphql";
-import { AnimatedText } from "@/shared/ui/design/ui/animated-text";
-import { AutoForm } from "@/shared/ui/design/ui/auto-form";
-import Button from "@/shared/ui/design/ui/button/Button.vue";
-import { toTypedSchema } from "@vee-validate/zod";
-import { GenericObject, useForm } from "vee-validate";
-import { z } from "zod";
-import { eventService } from "../api";
-import { DateValue } from "@internationalized/date";
-import { toast } from "vue-sonner";
+} from "@/shared/api/gql/graphql"
+import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
+import { AutoForm } from "@/shared/ui/design/ui/auto-form"
+import Button from "@/shared/ui/design/ui/button/Button.vue"
+import { toTypedSchema } from "@vee-validate/zod"
+import { GenericObject, useForm } from "vee-validate"
+import { z } from "zod"
+import { eventService } from "../api"
+import { DateValue } from "@internationalized/date"
+import { toast } from "vue-sonner"
 import {
   getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
   prettifyTimestamp,
-} from "@/shared/lib/date-utils";
-import { tanstackQueryClient } from "@/main";
-import { CalendarData } from "@/entities/schedule/api";
-import DeleteEventTrigger from "./DeleteEventTrigger.vue";
-import { useIsMutating } from "@tanstack/vue-query";
-import { computed, onMounted } from "vue";
+} from "@/shared/lib/date-utils"
+import { tanstackQueryClient } from "@/main"
+import { CalendarData } from "@/entities/schedule/api"
+import DeleteEventTrigger from "./DeleteEventTrigger.vue"
+import { useIsMutating } from "@tanstack/vue-query"
+import { computed, onMounted } from "vue"
 
 const props = defineProps<{
-  initialDate?: DateValue;
-  eventData?: CalendarData["events"][number];
-}>();
+  initialDate?: DateValue
+  eventData?: CalendarData["events"][number]
+}>()
 
-const emits = defineEmits<{ success: [e: string] }>();
+const emits = defineEmits<{ success: [e: string] }>()
 
 const formSchema = !props.eventData
   ? z.object({
@@ -69,46 +69,46 @@ const formSchema = !props.eventData
       endTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время окончания"),
-    });
+    })
 
 onMounted(() => {
-  if (!props.eventData) return;
+  if (!props.eventData) return
   form.setValues({
     startTime: getLocalStartTimeByTimestamp(props.eventData.dayEventStart),
     endTime: getLocalStartTimeByTimestamp(props.eventData.endTime),
-  });
-});
+  })
+})
 
 const form = useForm({
   validationSchema: toTypedSchema(formSchema),
-});
+})
 
 async function onSubmit(values: GenericObject) {
-  const cloneStartDate = structuredClone(values.date) as Date;
-  const [startHour, startMinute] = values.startTime.split(":");
-  cloneStartDate.setHours(parseInt(startHour), parseInt(startMinute));
-  const startTime = Math.floor(cloneStartDate.getTime() / 1000);
+  const cloneStartDate = structuredClone(values.date) as Date
+  const [startHour, startMinute] = values.startTime.split(":")
+  cloneStartDate.setHours(parseInt(startHour), parseInt(startMinute))
+  const startTime = Math.floor(cloneStartDate.getTime() / 1000)
 
-  const cloneEndDate = structuredClone(values.date) as Date;
-  const [endHour, endMinute] = values.endTime.split(":");
-  cloneEndDate.setHours(parseInt(endHour), parseInt(endMinute));
-  const endTime = Math.floor(cloneEndDate.getTime() / 1000);
+  const cloneEndDate = structuredClone(values.date) as Date
+  const [endHour, endMinute] = values.endTime.split(":")
+  cloneEndDate.setHours(parseInt(endHour), parseInt(endMinute))
+  const endTime = Math.floor(cloneEndDate.getTime() / 1000)
 
   const payload: CalendarCreateEvent = {
     title: values.title,
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-  };
+  }
 
   if (!props.eventData) {
     // TODO handle create
-    const response = await eventService.mutations.createEvent(payload);
-    await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] });
+    const response = await eventService.mutations.createEvent(payload)
+    await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
 
     const toastMessage = `Событие «${payload.title}», даты ${prettifyTimestamp(
       startTime
-    )} - ${prettifyTimestamp(endTime)}`;
+    )} - ${prettifyTimestamp(endTime)}`
 
     toast("Событие было создано", {
       description: toastMessage,
@@ -116,9 +116,9 @@ async function onSubmit(values: GenericObject) {
         label: "Абоба",
         onClick: () => console.log("Абоба"),
       },
-    });
-    emits("success", response.createEvent.title);
-    return;
+    })
+    emits("success", response.createEvent.title)
+    return
   }
 
   // TODO handle update
@@ -129,13 +129,13 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-  };
-  const response = await eventService.mutations.updateEvent(payload2);
-  await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] });
+  }
+  const response = await eventService.mutations.updateEvent(payload2)
+  await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
 
   const toastMessage = `Событие «${payload.title}», даты ${prettifyTimestamp(
     startTime
-  )} - ${prettifyTimestamp(endTime)}`;
+  )} - ${prettifyTimestamp(endTime)}`
 
   toast("Событие было обновлено", {
     description: toastMessage,
@@ -143,17 +143,17 @@ async function onSubmit(values: GenericObject) {
       label: "Абоба",
       onClick: () => console.log("Абоба"),
     },
-  });
-  emits("success", "");
+  })
+  emits("success", "")
 }
 
 const isDeletingEvent = useIsMutating({
   mutationKey: ["deleteEvent", props.eventData?.id],
-});
+})
 
 const isPerformingAction = computed(() => {
-  return !!isDeletingEvent.value || form.isSubmitting.value;
-});
+  return !!isDeletingEvent.value || form.isSubmitting.value
+})
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 // @ts-check
 
-import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import vueParser from "vue-eslint-parser";
+import eslint from "@eslint/js"
+import tseslint from "typescript-eslint"
+import vueParser from "vue-eslint-parser"
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -20,4 +20,4 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "warn",
     },
   }
-);
+)

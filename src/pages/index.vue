@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
-import { RouterView } from "vue-router";
+import { computed, defineAsyncComponent } from "vue"
+import { RouterView } from "vue-router"
 
-import AuthLayout from "../shared/ui/AuthLayout.vue";
-import MainLayout from "../shared/ui/MainLayout.vue";
-import { useSessionState } from "../entities/user/model";
+import AuthLayout from "../shared/ui/AuthLayout.vue"
+import MainLayout from "../shared/ui/MainLayout.vue"
+import { useSessionState } from "../entities/user/model"
 
-const session = useSessionState();
+const session = useSessionState()
 
 const layout: Record<
   "MainLayout" | "EditorLayout" | "AuthLayout",
@@ -15,7 +15,7 @@ const layout: Record<
   EditorLayout: "div",
   AuthLayout: AuthLayout,
   MainLayout: MainLayout,
-};
+}
 </script>
 
 <template>

@@ -1,1 +1,1 @@
-export { default as AnimatedText } from "./AnimatedText.vue";
+export { default as AnimatedText } from "./AnimatedText.vue"

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Component, InputHTMLAttributes } from 'vue'
-import type { ZodAny, z } from 'zod'
-import type { INPUT_COMPONENTS } from './constant'
+import type { Component, InputHTMLAttributes } from "vue"
+import type { ZodAny, z } from "zod"
+import type { INPUT_COMPONENTS } from "./constant"
 
 export interface FieldProps {
   fieldName: string
@@ -37,12 +37,11 @@ type UnwrapArray<T> = T extends (infer U)[] ? U : never
 
 export type Config<SchemaType extends object> = {
   // If SchemaType.key is an object, create a nested Config, otherwise ConfigItem
-  [Key in keyof SchemaType]?:
-  SchemaType[Key] extends any[]
+  [Key in keyof SchemaType]?: SchemaType[Key] extends any[]
     ? UnwrapArray<Config<SchemaType[Key]>>
     : SchemaType[Key] extends object
       ? Config<SchemaType[Key]>
-      : ConfigItem;
+      : ConfigItem
 }
 
 export enum DependencyType {

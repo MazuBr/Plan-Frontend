@@ -1,16 +1,16 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
 
-type Subjects = "task" | "calendar" | "settings";
+type Subjects = "task" | "calendar" | "settings"
 
 declare module "vue-router" {
   interface RouteMeta {
-    label: string;
-    visible: boolean;
-    breadCrumb: string;
-    protection?: Subjects[];
-    icon?: string;
-    breadCrumbExtra?: string[];
-    layoutOverride?: "AuthLayout" | "MainLayout" | "EditorLayout";
+    label: string
+    visible: boolean
+    breadCrumb: string
+    protection?: Subjects[]
+    icon?: string
+    breadCrumbExtra?: string[]
+    layoutOverride?: "AuthLayout" | "MainLayout" | "EditorLayout"
   }
 }
 
@@ -77,10 +77,10 @@ const routes: RouteRecordRaw[] = [
     name: "NotFound",
     component: () => import("../not-found/PageNotFound.vue"),
   },
-];
+]
 
 export const router = createRouter({
   history: createWebHistory(),
 
   routes,
-});
+})

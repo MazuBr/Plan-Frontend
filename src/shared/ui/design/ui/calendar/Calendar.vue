@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed } from "vue";
+import { type HTMLAttributes, computed } from "vue"
 import {
   CalendarRoot,
   type CalendarRootEmits,
   type CalendarRootProps,
   useForwardPropsEmits,
-} from "radix-vue";
+} from "radix-vue"
 import {
   CalendarCell,
   CalendarCellTrigger,
@@ -18,23 +18,23 @@ import {
   CalendarHeading,
   CalendarNextButton,
   CalendarPrevButton,
-} from ".";
-import { cn } from "@/shared/lib/utils";
-import CalendarGridBroadcaster from "./CalendarGridBroadcaster.vue";
+} from "."
+import { cn } from "@/shared/lib/utils"
+import CalendarGridBroadcaster from "./CalendarGridBroadcaster.vue"
 
 const props = defineProps<
   CalendarRootProps & { class?: HTMLAttributes["class"] }
->();
+>()
 
-const emits = defineEmits<CalendarRootEmits>();
+const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>

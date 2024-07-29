@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import CreateEventDialog from "@/entities/event/ui/CreateEventDialog.vue";
-import type { DateValue } from "@internationalized/date";
-import type { Grid } from "radix-vue/date";
-import ScheduleMonthCell from "./ScheduleMonthCell.vue";
-import { useQuery } from "@tanstack/vue-query";
-import { computed, toRef } from "vue";
-import { scheduleService } from "../api";
-import { getDayEvents, useFetchScheduleForCalendar } from "../model";
+import CreateEventDialog from "@/entities/event/ui/CreateEventDialog.vue"
+import type { DateValue } from "@internationalized/date"
+import type { Grid } from "radix-vue/date"
+import ScheduleMonthCell from "./ScheduleMonthCell.vue"
+import { useQuery } from "@tanstack/vue-query"
+import { computed, toRef } from "vue"
+import { scheduleService } from "../api"
+import { getDayEvents, useFetchScheduleForCalendar } from "../model"
 
 const props = defineProps<{
-  days: string[];
-  calendarGrid: Grid<DateValue>[];
-}>();
+  days: string[]
+  calendarGrid: Grid<DateValue>[]
+}>()
 
-const { scheduleQuery } = useFetchScheduleForCalendar(() => props.calendarGrid);
+const { scheduleQuery } = useFetchScheduleForCalendar(() => props.calendarGrid)
 </script>
 
 <template>

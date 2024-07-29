@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
-import { eventService } from "../api";
+import { useMutation } from "@tanstack/vue-query"
+import { eventService } from "../api"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/shared/ui/design/ui/popover";
-import { Button } from "@/shared/ui/design";
-import { AnimatedText } from "@/shared/ui/design/ui/animated-text";
-import { tanstackQueryClient } from "@/main";
+} from "@/shared/ui/design/ui/popover"
+import { Button } from "@/shared/ui/design"
+import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
+import { tanstackQueryClient } from "@/main"
 
-const props = defineProps<{ id: number }>();
-const emits = defineEmits<{ success: [] }>();
+const props = defineProps<{ id: number }>()
+const emits = defineEmits<{ success: [] }>()
 
 const { mutate, isPending } = useMutation({
   mutationKey: ["deleteEvent", props.id],
@@ -20,10 +20,10 @@ const { mutate, isPending } = useMutation({
     eventService.mutations.deleteEvents(eventIds),
 
   onSuccess: () => {
-    emits("success");
-    return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] });
+    emits("success")
+    return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
   },
-});
+})
 </script>
 
 <template>

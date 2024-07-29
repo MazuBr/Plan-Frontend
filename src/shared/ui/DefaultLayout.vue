@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { computed, ref, useSlots } from "vue";
+import { computed, ref, useSlots } from "vue"
 import {
   getMonochromeHex,
   parsedTailwindConfig,
-} from "../lib/tailwind-property-getter";
+} from "../lib/tailwind-property-getter"
 
 const props = withDefaults(
   defineProps<{
-    sidebarWidth?: string;
-    activeSidebarDefault?: boolean;
-    forceDark?: boolean;
+    sidebarWidth?: string
+    activeSidebarDefault?: boolean
+    forceDark?: boolean
   }>(),
   {
     sidebarWidth: "320px",
     activeSidebarDefault: false,
   }
-);
+)
 
 defineExpose({
   setSidebarState,
-});
+})
 
 const backgroundColor = computed(() => {
-  if (props.forceDark) return getMonochromeHex(9);
+  if (props.forceDark) return getMonochromeHex(9)
 
-  return getMonochromeHex(1);
-});
+  return getMonochromeHex(1)
+})
 
-const activeSidebar = ref(props.activeSidebarDefault);
+const activeSidebar = ref(props.activeSidebarDefault)
 
-const slots = useSlots();
+const slots = useSlots()
 
-const hasFirstSidebar = computed(() => !!slots.sidebarA);
-const hasSecondSidebar = computed(() => !!slots.sidebarB);
-const hasLeftSidebar = computed(() => !!slots.sidebarLeft);
+const hasFirstSidebar = computed(() => !!slots.sidebarA)
+const hasSecondSidebar = computed(() => !!slots.sidebarB)
+const hasLeftSidebar = computed(() => !!slots.sidebarLeft)
 
 function setSidebarState(val: boolean | null) {
   if (val === null) {
-    activeSidebar.value = !activeSidebar.value;
-    return;
+    activeSidebar.value = !activeSidebar.value
+    return
   }
 
-  activeSidebar.value = val;
+  activeSidebar.value = val
 }
 </script>
 
