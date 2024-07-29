@@ -1,5 +1,6 @@
 mutation UpdateEvent($input: CalendaUpdateEvents!) {
   updateEvent(input: $input) {
     eventId
+    title
   }
 }

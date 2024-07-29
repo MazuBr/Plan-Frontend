@@ -7,11 +7,14 @@ import {
 import { Button } from "@/shared/ui/design"
 import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
 import { useEventsModel } from "../model"
+import { CalendarData } from "@/entities/schedule/api"
 
-const props = defineProps<{ id: number }>()
+const props = defineProps<{ event: CalendarData["events"][number] }>()
 const emits = defineEmits<{ success: [] }>()
 
-const { deleteEventMutation, isPendingEventMutation } = useEventsModel(props.id)
+const { deleteEventMutation, isPendingEventMutation } = useEventsModel(
+  props.event
+)
 </script>
 
 <template>
@@ -37,7 +40,7 @@ const { deleteEventMutation, isPendingEventMutation } = useEventsModel(props.id)
         class="text-error-1"
         variant="ghost"
         @click="
-          deleteEventMutation([id], {
+          deleteEventMutation([event.id], {
             onSuccess: () => emits('success'),
           })
         "
