@@ -13,6 +13,7 @@ import { DateValue } from "@internationalized/date"
 import {
   getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
+  isoToEpoch,
 } from "@/shared/lib/date-utils"
 import { CalendarData } from "@/entities/schedule/api"
 import DeleteEventTrigger from "./DeleteEventTrigger.vue"
@@ -81,19 +82,19 @@ const form = useForm({
 })
 
 const { asyncCreateEventMutation, asyncUpdateEventMutation } = useEventsModel(
-  props.eventData?.id
+  props.eventData
 )
 
 async function onSubmit(values: GenericObject) {
   const cloneStartDate = structuredClone(values.date) as Date
   const [startHour, startMinute] = values.startTime.split(":")
   cloneStartDate.setHours(parseInt(startHour), parseInt(startMinute))
-  const startTime = Math.floor(cloneStartDate.getTime() / 1000)
+  const startTime = isoToEpoch(cloneStartDate.toISOString())
 
   const cloneEndDate = structuredClone(values.date) as Date
   const [endHour, endMinute] = values.endTime.split(":")
   cloneEndDate.setHours(parseInt(endHour), parseInt(endMinute))
-  const endTime = Math.floor(cloneEndDate.getTime() / 1000)
+  const endTime = isoToEpoch(cloneEndDate.toISOString())
 
   const createPayload: CalendarCreateEvent = {
     title: values.title,
@@ -166,7 +167,7 @@ const isPerformingAction = computed(() => {
 
       <DeleteEventTrigger
         v-if="eventData"
-        :id="eventData.id"
+        :event="eventData"
         @success="$emit('success', '')"
       />
     </div>

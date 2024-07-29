@@ -11,6 +11,12 @@ const options = {
   timeZone: "UTC",
 } satisfies Intl.DateTimeFormatOptions
 
+export function isoToEpoch(iso?: string) {
+  if (!iso) throw new Error("invalid iso")
+
+  return Math.floor(new Date(iso).getTime() / 1000)
+}
+
 export function prettifyTimestamp(timestamp: number | string) {
   return new Intl.DateTimeFormat("ru-RU", options).format(new Date(timestamp))
 }

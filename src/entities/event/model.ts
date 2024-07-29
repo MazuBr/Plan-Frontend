@@ -3,13 +3,14 @@ import {
   CalendarCreateEvent,
   CalendaUpdateEvents,
 } from "@/shared/api/gql/graphql"
-import { prettifyTimestamp } from "@/shared/lib/date-utils"
+import { isoToEpoch, prettifyTimestamp } from "@/shared/lib/date-utils"
 import { useMutation } from "@tanstack/vue-query"
 import { toast } from "vue-sonner"
 import { eventService } from "./api"
 import { removeManualEventById } from "../schedule/model"
+import { CalendarData } from "../schedule/api"
 
-export const useEventsModel = (eventId?: number) => {
+export const useEventsModel = (event?: CalendarData["events"][number]) => {
   const { mutateAsync: asyncCreateEventMutation } = useMutation({
     meta: {
       context: "Создание события",
@@ -63,7 +64,23 @@ export const useEventsModel = (eventId?: number) => {
         description: toastMessage,
         action: {
           label: "Отмена",
-          onClick: () => toast.info("Скоро будет доступно"),
+          onClick: () =>
+            eventService.mutations
+              .updateEvent({
+                eventId: event?.id || 0,
+                comment: event?.comment,
+                endTime: isoToEpoch(event?.endTime),
+                startTime: isoToEpoch(event?.dayEventStart),
+                title: event?.title,
+              })
+              .then((r) => {
+                toast.success(
+                  `Событие ${r.updateEvent.title} успешно восстановлено`
+                )
+                tanstackQueryClient.invalidateQueries({
+                  queryKey: ["calendar"],
+                })
+              }),
         },
       })
 
@@ -73,7 +90,7 @@ export const useEventsModel = (eventId?: number) => {
 
   const { mutate: deleteEventMutation, isPending: isPendingEventMutation } =
     useMutation({
-      mutationKey: ["deleteEvent", eventId],
+      mutationKey: ["deleteEvent", event?.id],
       meta: {
         context: "Удаление события",
       },
@@ -85,7 +102,22 @@ export const useEventsModel = (eventId?: number) => {
         toast("Событие было удалено", {
           action: {
             label: "Отмена",
-            onClick: () => toast.info("Скоро будет доступно"),
+            onClick: () =>
+              eventService.mutations
+                .createEvent({
+                  title: event?.title || "",
+                  comment: event?.comment,
+                  startTime: isoToEpoch(event?.dayEventStart),
+                  endTime: isoToEpoch(event?.endTime),
+                })
+                .then((r) => {
+                  toast.success(
+                    `Событие ${r.createEvent.title} успешно восстановлено`
+                  )
+                  tanstackQueryClient.invalidateQueries({
+                    queryKey: ["calendar"],
+                  })
+                }),
           },
         })
 
