@@ -10,11 +10,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
-
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -30,5 +27,10 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tailwind.config.js"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tailwind.config.js"
+  ]
 }

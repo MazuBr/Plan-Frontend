@@ -5,7 +5,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/shared/ui/design/ui/card";
+} from "@/shared/ui/design/ui/card"
 </script>
 
 <template>

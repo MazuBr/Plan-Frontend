@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useSessionState } from "@/entities/user/model";
-import { UserCreate } from "@/shared/api/restApi";
+import { useSessionState } from "@/entities/user/model"
+import { UserCreate } from "@/shared/api/restApi"
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@/shared/ui/design/ui/alert";
-import AnimatedText from "@/shared/ui/design/ui/animated-text/AnimatedText.vue";
-import { AutoForm } from "@/shared/ui/design/ui/auto-form";
-import Button from "@/shared/ui/design/ui/button/Button.vue";
-import { toTypedSchema } from "@vee-validate/zod";
-import { GenericObject, useForm } from "vee-validate";
-import { ref } from "vue";
-import { z } from "zod";
+} from "@/shared/ui/design/ui/alert"
+import AnimatedText from "@/shared/ui/design/ui/animated-text/AnimatedText.vue"
+import { AutoForm } from "@/shared/ui/design/ui/auto-form"
+import Button from "@/shared/ui/design/ui/button/Button.vue"
+import { toTypedSchema } from "@vee-validate/zod"
+import { GenericObject, useForm } from "vee-validate"
+import { ref } from "vue"
+import { z } from "zod"
 
 const formSchema = z
   .object({
@@ -43,39 +43,39 @@ const formSchema = z
   .refine((data) => data.password === data.confirm, {
     message: "Пароли должны совпадать",
     path: ["confirm"],
-  });
+  })
 
 const form = useForm({
   validationSchema: toTypedSchema(formSchema),
-});
+})
 
-const error = ref("");
-const session = useSessionState();
+const error = ref("")
+const session = useSessionState()
 async function onSubmit(values: GenericObject) {
   try {
-    error.value = "";
+    error.value = ""
     const payload = {
       ...values,
       ...values.optional,
       optional: undefined,
-    };
-    await session.register(payload as UserCreate);
+    }
+    await session.register(payload as UserCreate)
   } catch (e) {
-    const errDetails = (e as any)?.response?.data?.detail;
-    if (!errDetails) return;
+    const errDetails = (e as any)?.response?.data?.detail
+    if (!errDetails) return
 
-    let errorBag: GenericObject = {};
+    let errorBag: GenericObject = {}
     for (const key in errDetails) {
       if (Object.prototype.hasOwnProperty.call(form.values, key)) {
-        const element = errDetails[key];
-        errorBag[key] = element;
+        const element = errDetails[key]
+        errorBag[key] = element
       }
     }
 
     if (Object.keys(errorBag).length) {
-      form.setErrors(errorBag);
+      form.setErrors(errorBag)
     } else {
-      error.value = errDetails;
+      error.value = errDetails
     }
   }
 }

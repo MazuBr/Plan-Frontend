@@ -5,14 +5,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/design/ui/dialog";
-import EventForm from "./EventForm.vue";
-import { ref } from "vue";
-import { CalendarData } from "@/entities/schedule/api";
+} from "@/shared/ui/design/ui/dialog"
+import EventForm from "./EventForm.vue"
+import { ref } from "vue"
+import { CalendarData } from "@/entities/schedule/api"
 
-defineProps<{ eventData: CalendarData["events"][number] }>();
+defineProps<{ eventData: CalendarData["events"][number] }>()
 
-const isOpened = ref(false);
+const isOpened = ref(false)
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { AxiosRequestConfig as OriginalAxiosRequestConfig } from "axios";
+import { AxiosRequestConfig as OriginalAxiosRequestConfig } from "axios"
 
 declare module "axios" {
   // todo Решить проблему Type 'AxiosRequestConfig<D>' recursively references itself as a base type
@@ -6,7 +6,7 @@ declare module "axios" {
   // @ts-ignore
   export interface AxiosRequestConfig extends OriginalAxiosRequestConfig {
     // custom properties
-    skipAuth?: boolean;
-    skipAuthWithToken?: boolean;
+    skipAuth?: boolean
+    skipAuthWithToken?: boolean
   }
 }

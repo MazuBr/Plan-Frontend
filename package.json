@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev-expose": "vite --host local.matv.planirun --port 443",
+    "lint": "npx eslint src/**/*.{ts,vue}",
     "test": "vitest run",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
@@ -33,22 +34,28 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.3.2",
     "@graphql-codegen/near-operation-file-preset": "^3.0.0",
     "@parcel/watcher": "^2.4.1",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^20.14.10",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
     "happy-dom": "^14.12.3",
     "postcss": "^8.4.39",
+    "prettier": "3.3.3",
     "tailwindcss": "^3.4.4",
     "ts-deep-extract-types": "^1.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0",
     "vite": "^5.3.1",
     "vitest": "^2.0.1",
+    "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.0.21"
   }
 }

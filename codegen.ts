@@ -1,4 +1,4 @@
-import type { CodegenConfig } from "@graphql-codegen/cli";
+import type { CodegenConfig } from "@graphql-codegen/cli"
 
 const config: CodegenConfig = {
   schema: "./schema.json",
@@ -31,10 +31,15 @@ const config: CodegenConfig = {
             avoidOptionals: true,
           },
         },
+        {
+          add: {
+            content: "/* eslint-disable */\n// prettier-ignore",
+          },
+        },
         "typed-document-node",
       ],
     },
   },
-};
+}
 
-export default config;
+export default config

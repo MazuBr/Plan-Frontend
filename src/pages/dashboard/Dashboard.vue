@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { restClient } from "@/shared/api/base";
-import { useSessionState } from "../../entities/user/model";
-import { Button } from "@/shared/ui/design";
-import { useQuery } from "@tanstack/vue-query";
+import { restClient } from "@/shared/api/base"
+import { useSessionState } from "../../entities/user/model"
+import { Button } from "@/shared/ui/design"
+import { useQuery } from "@tanstack/vue-query"
 
-const session = useSessionState();
+const session = useSessionState()
 
 async function callAboba() {
-  await restClient.user.abobaUserAbobaPost();
+  await restClient.user.abobaUserAbobaPost()
 }
 </script>
 

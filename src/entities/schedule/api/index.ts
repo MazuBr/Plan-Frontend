@@ -1,15 +1,15 @@
-import { graphqlClient } from "@/shared/api/base";
+import { graphqlClient } from "@/shared/api/base"
 import {
   GetCalendarMonthDocument,
   GetCalendarMonthQuery,
-} from "./GetCalendarMonth.query.generated";
+} from "./GetCalendarMonth.query.generated"
 
-import { DeepExtractTypeSkipArrays } from "ts-deep-extract-types";
+import { DeepExtractTypeSkipArrays } from "ts-deep-extract-types"
 
 export type CalendarData = DeepExtractTypeSkipArrays<
   GetCalendarMonthQuery,
   ["calendar"]
->;
+>
 
 export const scheduleService = {
   getters: {
@@ -17,11 +17,11 @@ export const scheduleService = {
       const data = await graphqlClient.request(GetCalendarMonthDocument, {
         epochStart,
         epochEnd,
-      });
+      })
 
-      return data.calendar;
+      return data.calendar
     },
   },
 
   mutations: {},
-};
+}

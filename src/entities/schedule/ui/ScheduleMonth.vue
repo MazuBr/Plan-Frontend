@@ -1,40 +1,33 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed } from "vue";
+import { type HTMLAttributes, computed } from "vue"
 import {
   CalendarRoot,
   type CalendarRootEmits,
   type CalendarRootProps,
   useForwardPropsEmits,
-} from "radix-vue";
+} from "radix-vue"
 import {
-  CalendarCell,
-  CalendarCellTrigger,
-  CalendarGrid,
-  CalendarGridBody,
-  CalendarGridHead,
-  CalendarGridRow,
-  CalendarHeadCell,
   CalendarHeader,
   CalendarHeading,
   CalendarNextButton,
   CalendarPrevButton,
-} from "@/shared/ui/design/ui/calendar";
-import { cn } from "@/shared/lib/utils";
-import ScheduleMonthGrid from "./ScheduleMonthGrid.vue";
+} from "@/shared/ui/design/ui/calendar"
+import { cn } from "@/shared/lib/utils"
+import ScheduleMonthGrid from "./ScheduleMonthGrid.vue"
 
 const props = defineProps<
   CalendarRootProps & { class?: HTMLAttributes["class"] }
->();
+>()
 
-const emits = defineEmits<CalendarRootEmits>();
+const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
@@ -45,7 +38,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     locale="ru"
   >
-    <div class="flex gap-3 no-wrap">
+    <div class="flex gap-3 no-wrap justify-between">
       <CalendarHeader class="w-fit gap-3">
         <CalendarPrevButton />
         <CalendarHeading class="text-xl" />
@@ -53,12 +46,12 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       </CalendarHeader>
 
       <div>
-        <span class="italic">выбор месяц/неделя/день</span>
+        <slot name="schedule-handler" />
       </div>
     </div>
 
     <ScheduleMonthGrid
-      style="height: calc(100% - 34px)"
+      style="height: calc(100% - 40px)"
       :days="weekDays"
       :calendar-grid="grid"
     />
