@@ -44,7 +44,7 @@ export const useSessionState = createGlobalState(() => {
   }
 
   async function logout() {
-    await restClient.user.logoutUserUserLogoutPost({ withCredentials: true })
+    await restClient.user.logoutUserUserLogoutPost()
     await checkSession()
     isAuth.value = false
     router.push({ name: "login" })
