@@ -6,7 +6,7 @@ https://plan-frontend.onrender.com
 
 ### Local dev
 
-1. Установить зависимости
+1. Установить зависимости.
 
 ```
 npm install

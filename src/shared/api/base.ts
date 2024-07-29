@@ -96,11 +96,12 @@ async function requestValidAccessToken() {
           accessToken = jwt
           localStorage.setItem("jwt", jwt)
           refetchTokenRequestBusy = false
-          return "Сессия обновлена"
+          return "Сессия продлена"
         },
         error: () => {
           refetchTokenRequestBusy = false
-          return "Обновление сессии закончилась неудачно"
+          // TODO сохранить контекст для редиректа пользователя после реавторизации
+          return "Автоматическое продление сессии закончилось неудачно"
         },
       })
     }
