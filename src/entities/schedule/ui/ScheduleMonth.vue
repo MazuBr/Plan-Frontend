@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed, onMounted, ref } from "vue"
+import { type HTMLAttributes, computed } from "vue"
 import {
   CalendarRoot,
   type CalendarRootEmits,
@@ -31,11 +31,6 @@ const delegatedProps = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
-const calendarRoot = ref()
-onMounted(() => {
-  console.log(calendarRoot.value)
-})
-
 const selectedDate = useRouteQuery<string | undefined>("date")
 
 const computedDate = computed({
@@ -46,7 +41,6 @@ const computedDate = computed({
 
 <template>
   <CalendarRoot
-    ref="calendarRoot"
     v-slot="{ grid, weekDays }"
     class="h-full"
     :class="cn('', props.class)"
@@ -57,7 +51,7 @@ const computedDate = computed({
     <div class="flex gap-3 no-wrap justify-between">
       <CalendarHeader class="w-fit gap-3">
         <CalendarPrevButton />
-        <CalendarHeading class="text-xl" />
+        <CalendarHeading class="text-xl" mode="month" />
         <CalendarNextButton />
       </CalendarHeader>
 
