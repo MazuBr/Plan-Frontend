@@ -9,7 +9,7 @@ import { CalendarData } from "../api"
 import { ref } from "vue"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
-import { LocationQuery, parseQuery } from "vue-router"
+import { LocationQuery } from "vue-router"
 
 const props = withDefaults(
   defineProps<{

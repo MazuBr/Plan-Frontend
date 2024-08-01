@@ -82,10 +82,6 @@ function handleDecrement(dv: DateValue) {
       </div>
     </div>
 
-    <ScheduleWeekGrid
-      :grid="grid[0].rows[currentWeekIndex]"
-      :days="weekDays"
-      style="height: calc(100% - 40px)"
-    />
+    <ScheduleWeekGrid :grid="grid[0].rows[currentWeekIndex]" :days="weekDays" />
   </CalendarRoot>
 </template>
