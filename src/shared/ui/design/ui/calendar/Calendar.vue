@@ -46,7 +46,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <CalendarHeader>
       <CalendarPrevButton />
-      <CalendarHeading />
+      <CalendarHeading mode="month" />
       <CalendarNextButton />
     </CalendarHeader>
 

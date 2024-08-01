@@ -17,8 +17,14 @@ export function isoToEpoch(iso?: string) {
   return Math.floor(new Date(iso).getTime() / 1000)
 }
 
-export function prettifyTimestamp(timestamp: number | string) {
-  return new Intl.DateTimeFormat("ru-RU", options).format(new Date(timestamp))
+export function prettifyTimestamp(
+  timestamp: number | string,
+  optionsRewrite?: Partial<Intl.DateTimeFormatOptions>
+) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    ...options,
+    ...optionsRewrite,
+  }).format(new Date(timestamp))
 }
 
 export function getHoursAndMinutes(timestamp: number | string) {
