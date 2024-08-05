@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/shared/ui/design/ui/popover"
 import { CalendarData } from "../api"
-import { ref } from "vue"
+import { inject, ref } from "vue"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
 import { LocationQuery } from "vue-router"
@@ -16,6 +16,7 @@ const props = withDefaults(
     day: string
     events: CalendarData["events"]
     fullDay: string
+    notSameMonth?: boolean
   }>(),
   {
     events: () => [],
@@ -25,6 +26,8 @@ const props = withDefaults(
 const popoverOpened = ref(false)
 
 function applySelection(query: LocationQuery) {
+  if (props.notSameMonth) return "opacity-50"
+
   if (props.fullDay === query.date)
     return "border border-monochrome-6 rounded-md"
 }

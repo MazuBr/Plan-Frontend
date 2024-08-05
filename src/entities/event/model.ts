@@ -21,8 +21,8 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
     onSuccess(data, variables) {
       console.log(data, variables)
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
-        variables.startTime
-      )} - ${prettifyTimestamp(variables.endTime || Date.now())}`
+        variables.startTime * 1000
+      )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
 
       toast("Событие было создано", {
         description: toastMessage,
@@ -57,8 +57,8 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
     onSuccess(data, variables) {
       console.log(data, variables)
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
-        variables.startTime || Date.now()
-      )} - ${prettifyTimestamp(variables.endTime || Date.now())}`
+        (variables.startTime || Date.now()) * 1000
+      )} - ${prettifyTimestamp((variables.endTime || Date.now() * 1000))}`
 
       toast("Событие было обновлено", {
         description: toastMessage,
