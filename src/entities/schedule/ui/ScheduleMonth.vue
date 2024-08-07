@@ -49,7 +49,7 @@ const computedDate = computed({
     v-model:model-value="computedDate"
   >
     <div class="flex gap-3 no-wrap justify-between">
-      <CalendarHeader class="w-fit gap-3">
+      <CalendarHeader class="w-1/2">
         <CalendarPrevButton />
         <CalendarHeading class="text-xl" mode="month" />
         <CalendarNextButton />
