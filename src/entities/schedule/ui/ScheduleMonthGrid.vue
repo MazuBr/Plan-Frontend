@@ -39,7 +39,7 @@ function determineIfNotSameMonth(month: number) {
     class="calendar-grid h-full bg-monochrome-2"
     :class="scheduleQuery.isLoading.value ? 'opacity-50' : 'opacity-100'"
   >
-    <div v-for="day in days" :key="day" class="bg-monochrome-2 text-center">
+    <div v-for="day in days" :key="day" class="bg-monochrome-2 text-center h-8">
       {{ day }}
     </div>
 
@@ -68,8 +68,7 @@ function determineIfNotSameMonth(month: number) {
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1px;
   grid-auto-flow: row dense;
-  grid-template-rows:
-    32px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)
-    minmax(0, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
+  grid-template-rows: 32px;
 }
 </style>
