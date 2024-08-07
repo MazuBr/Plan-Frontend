@@ -19,7 +19,6 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
     mutationFn: (payload: CalendarCreateEvent) =>
       eventService.mutations.createEvent(payload),
     onSuccess(data, variables) {
-      console.log(data, variables)
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         variables.startTime * 1000
       )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
@@ -55,10 +54,9 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
     mutationFn: (payload: CalendaUpdateEvents) =>
       eventService.mutations.updateEvent(payload),
     onSuccess(data, variables) {
-      console.log(data, variables)
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         (variables.startTime || Date.now()) * 1000
-      )} - ${prettifyTimestamp((variables.endTime || Date.now() * 1000))}`
+      )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
 
       toast("Событие было обновлено", {
         description: toastMessage,
@@ -104,15 +102,10 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
             label: "Отмена",
             onClick: () =>
               eventService.mutations
-                .createEvent({
-                  title: event?.title || "",
-                  comment: event?.comment,
-                  startTime: isoToEpoch(event?.dayEventStart),
-                  endTime: isoToEpoch(event?.endTime),
-                })
+                .restoreEvents(data.deleteEvent.ids)
                 .then((r) => {
                   toast.success(
-                    `Событие ${r.createEvent.title} успешно восстановлено`
+                    `Событие ${r.restoreEvent[0].title} успешно восстановлено`
                   )
                   tanstackQueryClient.invalidateQueries({
                     queryKey: ["calendar"],

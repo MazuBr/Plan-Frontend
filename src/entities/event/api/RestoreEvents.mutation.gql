@@ -1,0 +1,5 @@
+mutation RestoreEvents($eventIds: [Int!]!) {
+  restoreEvent(input: { eventId: $eventIds }) {
+    title
+  }
+}

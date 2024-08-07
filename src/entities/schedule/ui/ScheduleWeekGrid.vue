@@ -12,7 +12,7 @@ function getScheduleTime() {
 </script>
 
 <template>
-  <div class="calendar-grid-week bg-monochrome-2">
+  <div class="calendar-grid-week bg-monochrome-2" >
     <div></div>
     <div v-for="weekDay in days" class="bg-monochrome-2 text-center">
       {{ weekDay }}
@@ -20,7 +20,7 @@ function getScheduleTime() {
     <div class="flex w-full gap-[1px] flex-col text-right">
       <div v-for="h in getScheduleTime()" class="h-12 text-sm">{{ h }}</div>
     </div>
-    <div v-for="day in grid">
+    <div v-for="day in grid" :class="$route.query.date === day.toString() ? 'border border-monochrome-6 rounded-md' : ''">
       <ScheduleDayCell :full-day="day.toString()" />
     </div>
   </div>
