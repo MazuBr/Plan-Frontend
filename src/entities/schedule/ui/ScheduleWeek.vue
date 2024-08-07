@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type HTMLAttributes, computed, ref } from "vue"
+import { type HTMLAttributes, computed, ref, watch } from "vue"
 import {
   CalendarRoot,
   type CalendarRootEmits,
@@ -17,6 +17,7 @@ import { useRouteQuery } from "@vueuse/router"
 import { DateValue, parseDate } from "@internationalized/date"
 import { Grid } from "radix-vue/date"
 import ScheduleWeekGrid from "./ScheduleWeekGrid.vue"
+import { getISOWeekNumber } from "@/shared/lib/date-utils"
 
 const props = defineProps<
   CalendarRootProps & { class?: HTMLAttributes["class"] }
@@ -39,7 +40,15 @@ const computedDate = computed({
   set: (val) => val,
 })
 
-const currentWeekIndex = ref(0)
+const currentWeekIndex = ref(
+  getISOWeekNumber(selectedDate.value || new Date().toDateString()) - 1 || 0
+)
+watch(selectedDate, (date) => {
+  if (!date) return
+
+  const x = getISOWeekNumber(date)
+  currentWeekIndex.value = x - 1
+})
 
 function handleIncrement(dv: DateValue) {
   currentWeekIndex.value++
@@ -58,6 +67,7 @@ function handleDecrement(dv: DateValue) {
     :class="cn('', props.class)"
     v-bind="forwarded"
     locale="ru"
+    :key="currentWeekIndex"
     v-model:model-value="computedDate"
   >
     <div class="flex gap-3 no-wrap justify-between">
@@ -82,10 +92,6 @@ function handleDecrement(dv: DateValue) {
       </div>
     </div>
 
-    <ScheduleWeekGrid
-      :grid="grid[0].rows[currentWeekIndex]"
-      :days="weekDays"
-      style="height: calc(100% - 40px)"
-    />
+    <ScheduleWeekGrid :grid="grid[0].rows[currentWeekIndex]" :days="weekDays" />
   </CalendarRoot>
 </template>

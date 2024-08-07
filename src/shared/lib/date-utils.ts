@@ -17,6 +17,26 @@ export function isoToEpoch(iso?: string) {
   return Math.floor(new Date(iso).getTime() / 1000)
 }
 
+export function getISOWeekNumber(date: string) {
+  const currentDate = new Date(date)
+
+  const monthStartDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  )
+
+  const firstDayOfWeek = monthStartDate.getDay()
+
+  const currentDay = currentDate.getDate()
+
+  const weekNumber =
+    Math.round((currentDay + firstDayOfWeek) / 7) +
+    (firstDayOfWeek === 0 ? 1 : 0) // Кейс с 6 неделями на одной странице календаря
+
+  return weekNumber
+}
+
 export function prettifyTimestamp(
   timestamp: number | string,
   optionsRewrite?: Partial<Intl.DateTimeFormatOptions>

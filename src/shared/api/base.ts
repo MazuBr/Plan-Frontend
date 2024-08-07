@@ -86,6 +86,7 @@ async function requestValidAccessToken() {
       const promise = restClient.user.refreshTokenUserRefreshTokenPost({
         skipAuth: true,
         withCredentials: true,
+        timeout: 5 * 60_000,
       })
       toast.promise(promise, {
         loading: "Автоматическое продление сессии",

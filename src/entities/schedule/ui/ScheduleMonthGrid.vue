@@ -3,9 +3,6 @@ import CreateEventDialog from "@/entities/event/ui/CreateEventDialog.vue"
 import type { DateValue } from "@internationalized/date"
 import type { Grid } from "radix-vue/date"
 import ScheduleMonthCell from "./ScheduleMonthCell.vue"
-import { useQuery } from "@tanstack/vue-query"
-import { computed, toRef } from "vue"
-import { scheduleService } from "../api"
 import { getDayEvents, useFetchScheduleForCalendar } from "../model"
 
 const props = defineProps<{
@@ -14,6 +11,27 @@ const props = defineProps<{
 }>()
 
 const { scheduleQuery } = useFetchScheduleForCalendar(() => props.calendarGrid)
+
+function determineIfNotSameMonth(month: number) {
+  const monthCount: Record<number, number> = {}
+
+  props.calendarGrid[0].cells.forEach((item) => {
+    const month = item.month
+    monthCount[month] = (monthCount[month] || 0) + 1
+  })
+
+  let mostPopularMonth = null
+  let maxCount = 0
+
+  for (const month in monthCount) {
+    if (monthCount[month] > maxCount) {
+      maxCount = monthCount[month]
+      mostPopularMonth = +month
+    }
+  }
+
+  return month !== mostPopularMonth
+}
 </script>
 
 <template>
@@ -27,11 +45,13 @@ const { scheduleQuery } = useFetchScheduleForCalendar(() => props.calendarGrid)
 
     <div
       v-for="cell in calendarGrid[0].cells"
+      :key="cell.toString()"
       class="bg-monochrome-1 hover:bg-monochrome-2"
     >
       <CreateEventDialog :initial-date="cell">
         <template #trigger>
           <ScheduleMonthCell
+            :not-same-month="determineIfNotSameMonth(cell.month)"
             :events="getDayEvents(cell)"
             :day="cell.day.toString()"
             :full-day="cell.toString()"

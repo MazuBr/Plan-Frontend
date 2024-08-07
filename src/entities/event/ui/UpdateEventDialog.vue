@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogScrollContent,
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/design/ui/dialog"
@@ -20,12 +21,12 @@ const isOpened = ref(false)
     <DialogTrigger as-child>
       <slot name="trigger" />
     </DialogTrigger>
-    <DialogContent>
+    <DialogScrollContent>
       <DialogHeader>
         <DialogTitle>Редактирование события</DialogTitle>
       </DialogHeader>
 
       <EventForm :event-data="eventData" @success="isOpened = false" />
-    </DialogContent>
+    </DialogScrollContent>
   </Dialog>
 </template>
