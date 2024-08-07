@@ -71,7 +71,7 @@ function handleDecrement(dv: DateValue) {
     v-model:model-value="computedDate"
   >
     <div class="flex gap-3 no-wrap justify-between">
-      <CalendarHeader class="w-fit gap-3">
+      <CalendarHeader class="w-1/2">
         <CalendarPrevButton
           :prev-page="currentWeekIndex === 0 ? undefined : handleDecrement"
         />
