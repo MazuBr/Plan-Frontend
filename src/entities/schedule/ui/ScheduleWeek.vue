@@ -15,7 +15,6 @@ import {
 import { cn } from "@/shared/lib/utils"
 import { useRouteQuery } from "@vueuse/router"
 import { DateValue, parseDate } from "@internationalized/date"
-import { Grid } from "radix-vue/date"
 import ScheduleWeekGrid from "./ScheduleWeekGrid.vue"
 import { getISOWeekNumber } from "@/shared/lib/date-utils"
 
@@ -26,6 +25,7 @@ const props = defineProps<
 const emits = defineEmits<CalendarRootEmits>()
 
 const delegatedProps = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { class: _, ...delegated } = props
 
   return delegated

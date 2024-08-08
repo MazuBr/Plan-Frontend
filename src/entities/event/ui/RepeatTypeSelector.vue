@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { RepeatTypes } from "@/shared/api/gql/graphql"
 import { getISOWeekNumber, getWeekDayByDate } from "@/shared/lib/date-utils"
-import {
-  AutoFormLabel,
-  Config,
-  FieldProps,
-} from "@/shared/ui/design/ui/auto-form"
+import { AutoFormLabel, FieldProps } from "@/shared/ui/design/ui/auto-form"
 import { beautifyObjectName } from "@/shared/ui/design/ui/auto-form/utils"
-import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { Label } from "@/shared/ui/design/ui/label"
 import RadioGroup from "@/shared/ui/design/ui/radio-group/RadioGroup.vue"
 import RadioGroupItem from "@/shared/ui/design/ui/radio-group/RadioGroupItem.vue"

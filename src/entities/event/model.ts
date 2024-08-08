@@ -82,7 +82,7 @@ function tryParseWeekdays(repeatData?: string | null) {
     } = JSON.parse(repeatData)
 
     return parsedRepeatData.weekly.daysOfWeek
-  } catch (e) {
+  } catch {
     return REPEAT_DEFAULTS.WEEK_DAYS
   }
 }

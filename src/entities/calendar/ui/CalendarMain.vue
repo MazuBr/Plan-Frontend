@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Calendar, currentCalendarGrid } from "@/shared/ui/design/ui/calendar"
-import { computed, watch } from "vue"
+import { computed } from "vue"
 import { useRouteQuery } from "@vueuse/router"
 import { parseDate } from "@internationalized/date"
 import { type CalendarRootEmits } from "radix-vue"

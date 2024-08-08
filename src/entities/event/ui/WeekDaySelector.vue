@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  AutoFormLabel,
-  Config,
-  FieldProps,
-} from "@/shared/ui/design/ui/auto-form"
+import { AutoFormLabel, FieldProps } from "@/shared/ui/design/ui/auto-form"
 import { beautifyObjectName } from "@/shared/ui/design/ui/auto-form/utils"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { useField } from "vee-validate"

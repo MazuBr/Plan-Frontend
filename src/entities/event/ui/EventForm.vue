@@ -8,18 +8,17 @@ import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
 import { AutoForm } from "@/shared/ui/design/ui/auto-form"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { toTypedSchema } from "@vee-validate/zod"
-import { GenericObject, useField, useFieldArray, useForm } from "vee-validate"
+import { GenericObject, useForm } from "vee-validate"
 import { z } from "zod"
 import { DateValue, parseDate } from "@internationalized/date"
 import {
-  getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
   isoToEpoch,
 } from "@/shared/lib/date-utils"
 import { CalendarData } from "@/entities/schedule/api"
 import DeleteEventTrigger from "./DeleteEventTrigger.vue"
 import { useIsMutating } from "@tanstack/vue-query"
-import { computed, onMounted, provide } from "vue"
+import { computed, onMounted } from "vue"
 import {
   DaysOfWeek,
   getRepeatConfig,

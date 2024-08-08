@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useSlots } from "vue"
-import {
-  getMonochromeHex,
-  parsedTailwindConfig,
-} from "../lib/tailwind-property-getter"
+import { getMonochromeHex } from "../lib/tailwind-property-getter"
 
 const props = withDefaults(
   defineProps<{
