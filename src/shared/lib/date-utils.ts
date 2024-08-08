@@ -46,9 +46,13 @@ export function getWeekDayByDate(
   date: string,
   options?: { full?: boolean; translated?: boolean }
 ) {
+  console.log(daysOfWeek.at(new Date(date).getDay() - 1)!)
   return options?.translated
-    ? getTranslatedDay(daysOfWeek.at(new Date(date).getDay())!, options?.full)
-    : daysOfWeek.at(new Date(date).getDay())!
+    ? getTranslatedDay(
+        daysOfWeek.at(new Date(date).getDay() - 1)!,
+        options?.full
+      )
+    : daysOfWeek.at(new Date(date).getDay() - 1)!
 }
 
 export function getISOWeekNumber(date: string) {

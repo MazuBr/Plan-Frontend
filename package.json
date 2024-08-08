@@ -24,6 +24,7 @@
     "graphql-request": "^7.1.0",
     "jwt-decode": "^4.0.0",
     "lucide-vue-next": "^0.407.0",
+    "plural-ru": "^2.0.2",
     "radix-vue": "^1.9.3",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",

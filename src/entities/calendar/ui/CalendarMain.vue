@@ -10,7 +10,9 @@ import { useFetchScheduleForCalendar } from "@/entities/schedule/model"
 const today = new Date().toISOString().slice(0, 10)
 
 const selectedDate = useRouteQuery<string | undefined>("date")
-selectedDate.value = today // Отлично от того, если задавать initialValue для useRouteQuery
+if (!selectedDate.value) {
+  selectedDate.value = today // Отлично от того, если задавать initialValue для useRouteQuery
+}
 
 const computedDate = computed({
   get: () =>

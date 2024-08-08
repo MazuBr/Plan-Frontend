@@ -21,6 +21,7 @@ import { useIsMutating } from "@tanstack/vue-query"
 import { computed, onMounted } from "vue"
 import {
   DaysOfWeek,
+  determineDelayLabel,
   getRepeatConfig,
   getRepeatInput,
   REPEAT_DEFAULTS,
@@ -55,8 +56,14 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
-          delay: z.number(),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          delay: z
+            .number({
+              invalid_type_error: "Введите целое число",
+              required_error: "Периодичность обязательна",
+            })
+            .positive({ message: "Введите положительное целое число" })
+            .int({ message: "Введите положительное целое число" }),
           repeatUntil: z.coerce.date(),
         })
         .describe("Настройка повторения")
@@ -84,8 +91,14 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
-          delay: z.number(),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          delay: z
+            .number({
+              invalid_type_error: "Введите целое число",
+              required_error: "Периодичность обязательна",
+            })
+            .positive({ message: "Введите положительное целое число" })
+            .int({ message: "Введите положительное целое число" }),
           repeatUntil: z.coerce.date(),
         })
         .describe("Настройка повторения")
@@ -102,8 +115,12 @@ onMounted(() => {
         repeatConfig: {
           delay: REPEAT_DEFAULTS.DELAY,
           repeatType: REPEAT_DEFAULTS.REPEAT_TYPE,
-          weekDays: REPEAT_DEFAULTS.WEEK_DAYS,
-          repeatUntil: REPEAT_DEFAULTS.REPEAT_UNTIL,
+          weekDays: REPEAT_DEFAULTS.getRelativeDefaultWeekDays(
+            props.initialDate?.toString()
+          ),
+          repeatUntil: REPEAT_DEFAULTS.getRelativeDefaultRepeatUntil(
+            props.initialDate?.toString()
+          ),
         },
       },
     })
@@ -175,9 +192,10 @@ const isPerformingAction = computed(() => {
 })
 
 const computedDelayLabel = computed(() => {
-  if (!form.values.repeatConfig) return "Повторять раз в"
-
-  return `Повторять ${form.values.repeatConfig.delay} раз в XYZ`
+  return determineDelayLabel(
+    form.values.repeatConfig?.delay,
+    form.values.repeatConfig?.repeatType
+  )
 })
 </script>
 
