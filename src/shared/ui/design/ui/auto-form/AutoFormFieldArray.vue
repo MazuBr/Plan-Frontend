@@ -111,7 +111,9 @@ provide(FieldContextKey, fieldContext)
               </Button>
             </AccordionContent>
 
-            <FormMessage />
+            <div v-if="$props.required" class="h-4">
+              <FormMessage />
+            </div>
           </AccordionItem>
         </FormItem>
       </Accordion>

@@ -7,6 +7,8 @@ import {
 import { beautifyObjectName } from "@/shared/ui/design/ui/auto-form/utils"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { useField } from "vee-validate"
+import { DaysOfWeek, daysOfWeek } from "../model"
+import { getTranslatedDay } from "@/shared/lib/date-utils"
 
 const props = defineProps<
   FieldProps & {
@@ -14,12 +16,9 @@ const props = defineProps<
   }
 >()
 
-type Days = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"
-const daysOfWeek: Days[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+const fieldContext = useField<DaysOfWeek[]>(props.fieldName)
 
-const fieldContext = useField<Days[]>(props.fieldName)
-
-function select(val: Days) {
+function select(val: DaysOfWeek) {
   if (!fieldContext.value.value) {
     fieldContext.setValue([val])
     return
@@ -33,7 +32,7 @@ function select(val: Days) {
   fieldContext.setValue(fieldContext.value.value.concat(val))
 }
 
-function isSelected(val: Days) {
+function isSelected(val: DaysOfWeek) {
   if (!fieldContext.value.value) return false
 
   return fieldContext.value.value.includes(val)
@@ -54,7 +53,7 @@ function isSelected(val: Days) {
         :variant="isSelected(day) ? 'default' : 'outline'"
         size="icon"
         @click="select(day)"
-        >{{ day }}</Button
+        >{{ getTranslatedDay(day) }}</Button
       >
     </div>
   </div>

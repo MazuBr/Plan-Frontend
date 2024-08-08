@@ -18,29 +18,6 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
-export type CalendaDeleteEvents = {
-  eventId: Array<Scalars['Int']['input']>;
-};
-
-export type CalendaDeleteEventsResponse = {
-  __typename?: 'CalendaDeleteEventsResponse';
-  ids: Array<Scalars['Int']['output']>;
-};
-
-export type CalendaRestoreEvents = {
-  eventId: Array<Scalars['Int']['input']>;
-};
-
-export type CalendaUpdateEvents = {
-  comment?: InputMaybe<Scalars['String']['input']>;
-  endTime?: InputMaybe<Scalars['Int']['input']>;
-  eventId: Scalars['Int']['input'];
-  eventStatus?: InputMaybe<EventStatus>;
-  repeat?: InputMaybe<InputRepeat>;
-  startTime?: InputMaybe<Scalars['Int']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Calendar = {
   __typename?: 'Calendar';
   comment?: Maybe<Scalars['String']['output']>;
@@ -59,6 +36,15 @@ export type CalendarCreateEvent = {
   repeat?: InputMaybe<InputRepeat>;
   startTime: Scalars['Int']['input'];
   title: Scalars['String']['input'];
+};
+
+export type CalendarDeleteEvents = {
+  eventId: Array<Scalars['Int']['input']>;
+};
+
+export type CalendarDeleteEventsResponse = {
+  __typename?: 'CalendarDeleteEventsResponse';
+  ids: Array<Scalars['Int']['output']>;
 };
 
 export type CalendarEventsByDay = {
@@ -84,15 +70,19 @@ export type CalendarHumanReadable = {
   title: Scalars['String']['output'];
 };
 
-export enum DaysOfWeek {
-  Friday = 'FRIDAY',
-  Monday = 'MONDAY',
-  Saturday = 'SATURDAY',
-  Sunday = 'SUNDAY',
-  Thursday = 'THURSDAY',
-  Tuesday = 'TUESDAY',
-  Wednesday = 'WEDNESDAY'
-}
+export type CalendarRestoreEvents = {
+  eventId: Array<Scalars['Int']['input']>;
+};
+
+export type CalendarUpdateEvents = {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  endTime?: InputMaybe<Scalars['Int']['input']>;
+  eventId: Scalars['Int']['input'];
+  eventStatus?: InputMaybe<EventStatus>;
+  repeat?: InputMaybe<InputRepeat>;
+  startTime?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
 
 export enum EventStatus {
   Active = 'ACTIVE',
@@ -106,26 +96,17 @@ export type EventUserRole = {
   userRole: Scalars['String']['output'];
 };
 
-export type InputMonthlyByWeekRepeat = {
-  daysOfWeek: DaysOfWeek;
-  week: Scalars['Int']['input'];
-};
-
 export type InputRepeat = {
   delay?: InputMaybe<Scalars['Int']['input']>;
-  repeatData: RepeatData;
-  repeatUntil?: InputMaybe<Scalars['String']['input']>;
-  repeateType: RepeatTypes;
-};
-
-export type InputWeeklyRepeat = {
-  daysOfWeek: Array<DaysOfWeek>;
+  repeatData?: InputMaybe<Scalars['String']['input']>;
+  repeatType: RepeatTypes;
+  repeatUntil?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEvent: Calendar;
-  deleteEvent: CalendaDeleteEventsResponse;
+  createEvent?: Maybe<Calendar>;
+  deleteEvent: CalendarDeleteEventsResponse;
   restoreEvent: Array<UpdatedEvent>;
   updateEvent: UpdatedEvent;
 };
@@ -137,17 +118,17 @@ export type MutationCreateEventArgs = {
 
 
 export type MutationDeleteEventArgs = {
-  input: CalendaDeleteEvents;
+  input: CalendarDeleteEvents;
 };
 
 
 export type MutationRestoreEventArgs = {
-  input: CalendaRestoreEvents;
+  input: CalendarRestoreEvents;
 };
 
 
 export type MutationUpdateEventArgs = {
-  input: CalendaUpdateEvents;
+  input: CalendarUpdateEvents;
 };
 
 export type Query = {
@@ -170,20 +151,15 @@ export type QueryCalendarEpochArgs = {
 export type Repeat = {
   __typename?: 'Repeat';
   delay?: Maybe<Scalars['Int']['output']>;
-  isRepeat?: Maybe<Scalars['Boolean']['output']>;
+  repeatData?: Maybe<Scalars['String']['output']>;
+  repeatType?: Maybe<RepeatTypes>;
   repeatUntil?: Maybe<Scalars['String']['output']>;
-  repeateType?: Maybe<RepeatTypes>;
-};
-
-export type RepeatData = {
-  monthlyByWeek?: InputMaybe<InputMonthlyByWeekRepeat>;
-  weekly?: InputMaybe<InputWeeklyRepeat>;
 };
 
 export enum RepeatTypes {
-  Dayly = 'DAYLY',
+  Daily = 'DAILY',
+  Monthly = 'MONTHLY',
   MonthlyByWeek = 'MONTHLY_BY_WEEK',
-  Monthy = 'MONTHY',
   Weekly = 'WEEKLY',
   Yearly = 'YEARLY'
 }
@@ -200,6 +176,7 @@ export type UpdatedEvent = {
   endTime?: Maybe<Scalars['Int']['output']>;
   eventId: Scalars['Int']['output'];
   eventStatus?: Maybe<EventStatus>;
+  repeat?: Maybe<Repeat>;
   startTime?: Maybe<Scalars['Int']['output']>;
   title?: Maybe<Scalars['String']['output']>;
 };

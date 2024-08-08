@@ -43,7 +43,9 @@ const booleanComponent = computed(() =>
       <FormDescription v-if="config?.description">
         {{ config.description }}
       </FormDescription>
-      <FormMessage />
+      <div v-if="$props.required" class="h-4">
+        <FormMessage />
+      </div>
     </FormItem>
   </FormField>
 </template>

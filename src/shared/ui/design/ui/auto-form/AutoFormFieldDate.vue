@@ -51,8 +51,10 @@ const df = new DateFormatter("ru-RU", {
                   "
                 >
                   <CalendarIcon class="mr-2 h-4 w-4" :size="16" />
+                  <!-- {{ slotProps.componentField.modelValue }} -->
                   {{
-                    slotProps.componentField.modelValue
+                    slotProps.componentField.modelValue &&
+                    "toDate" in slotProps.componentField.modelValue
                       ? df.format(
                           slotProps.componentField.modelValue.toDate(
                             getLocalTimeZone()
@@ -73,7 +75,9 @@ const df = new DateFormatter("ru-RU", {
       <FormDescription v-if="config?.description">
         {{ config.description }}
       </FormDescription>
-      <FormMessage />
+      <div v-if="$props.required" class="h-4">
+        <FormMessage />
+      </div>
     </FormItem>
   </FormField>
 </template>

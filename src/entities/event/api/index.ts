@@ -1,7 +1,7 @@
 import { graphqlClient } from "@/shared/api/base"
 import {
   CalendarCreateEvent,
-  CalendaUpdateEvents,
+  CalendarUpdateEvents,
 } from "@/shared/api/gql/graphql"
 import { CreateEventDocument } from "./CreateEvent.mutation.generated"
 import { DeleteEventsDocument } from "./DeleteEvents.mutation.generated"
@@ -16,7 +16,7 @@ export const eventService = {
       return await graphqlClient.request(CreateEventDocument, { event: input })
     },
 
-    async updateEvent(input: CalendaUpdateEvents) {
+    async updateEvent(input: CalendarUpdateEvents) {
       return await graphqlClient.request(UpdateEventDocument, { input })
     },
 
