@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T extends ZodRawShape">
 import type { ZodAny, ZodObject, ZodRawShape } from "zod"
-import { computed, provide } from "vue"
-import { FieldContextKey, useField } from "vee-validate"
+import { computed, onMounted, provide, ref } from "vue"
+import { FieldContextKey, FormMeta, useField, useForm } from "vee-validate"
 import AutoFormField from "./AutoFormField.vue"
 import type { Config, ConfigItem, Shape } from "./interface"
 import {
@@ -58,12 +58,15 @@ const shapes = computed(() => {
 const fieldContext = useField(props.fieldName)
 // @ts-expect-error ignore missing `id`
 provide(FieldContextKey, fieldContext)
+
+const opened = ref(props.fieldName)
 </script>
 
 <template>
   <section>
     <slot v-bind="props">
       <Accordion
+        v-model:model-value="opened"
         type="single"
         as-child
         class="w-full"

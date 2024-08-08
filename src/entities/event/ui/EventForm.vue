@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import {
   CalendarCreateEvent,
-  CalendaUpdateEvents as CalendarUpdateEvents,
+  CalendarUpdateEvents,
+  RepeatTypes,
 } from "@/shared/api/gql/graphql"
 import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
 import { AutoForm } from "@/shared/ui/design/ui/auto-form"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { toTypedSchema } from "@vee-validate/zod"
-import { GenericObject, useForm } from "vee-validate"
+import { GenericObject, useField, useFieldArray, useForm } from "vee-validate"
 import { z } from "zod"
-import { DateValue } from "@internationalized/date"
+import { DateValue, parseDate } from "@internationalized/date"
 import {
   getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
@@ -18,8 +19,17 @@ import {
 import { CalendarData } from "@/entities/schedule/api"
 import DeleteEventTrigger from "./DeleteEventTrigger.vue"
 import { useIsMutating } from "@tanstack/vue-query"
-import { computed, onMounted } from "vue"
-import { useEventsModel } from "../model"
+import { computed, onMounted, provide } from "vue"
+import {
+  DaysOfWeek,
+  getRepeatConfig,
+  getRepeatInput,
+  REPEAT_DEFAULTS,
+  useEventsModel,
+} from "../model"
+import WeekDaySelector from "./WeekDaySelector.vue"
+import { DependencyType } from "@/shared/ui/design/ui/auto-form/interface"
+import RepeatTypeSelector from "./RepeatTypeSelector.vue"
 
 const props = defineProps<{
   initialDate?: DateValue
@@ -44,6 +54,16 @@ const formSchema = !props.eventData
       endTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время окончания"),
+      isRepeated: z.boolean().optional(),
+      repeatConfig: z
+        .object({
+          repeatType: z.nativeEnum(RepeatTypes),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
+          delay: z.number(),
+          repeatUntil: z.coerce.date(),
+        })
+        .describe("Настройка повторения")
+        .optional(),
     })
   : z.object({
       title: z
@@ -56,29 +76,51 @@ const formSchema = !props.eventData
         .describe("Описание")
         .optional()
         .default(props.eventData.comment || ""),
-      date: z.coerce
-        .date({ required_error: "Дата обязательна" })
-        .default(
-          getDateValueByTimestamp(props.eventData?.dayEventStart) as any
-        ),
+      date: z.coerce.date({ required_error: "Дата обязательна" }),
       startTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время начала"),
       endTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время окончания"),
+      isRepeated: z.boolean().default(!!props.eventData.repeat).optional(),
+      repeatConfig: z
+        .object({
+          repeatType: z.nativeEnum(RepeatTypes),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
+          delay: z.number(),
+          repeatUntil: z.coerce.date(),
+        })
+        .describe("Настройка повторения")
+        .optional(),
     })
 
 onMounted(() => {
-  if (!props.eventData) return
+  if (!props.eventData) {
+    form.resetForm({
+      values: {
+        repeatConfig: {
+          delay: REPEAT_DEFAULTS.DELAY,
+          repeatType: REPEAT_DEFAULTS.REPEAT_TYPE,
+          weekDays: REPEAT_DEFAULTS.WEEK_DAYS,
+          repeatUntil: REPEAT_DEFAULTS.REPEAT_UNTIL,
+        },
+      },
+    })
+    return
+  }
   form.setValues({
+    date: parseDate(props.eventData.endTime.slice(0, 10)) as never as Date,
     startTime: getLocalStartTimeByTimestamp(props.eventData.dayEventStart),
     endTime: getLocalStartTimeByTimestamp(props.eventData.endTime),
+    isRepeated: !!props.eventData.repeat,
+    repeatConfig: getRepeatConfig(props.eventData.repeat),
   })
 })
 
 const form = useForm({
   validationSchema: toTypedSchema(formSchema),
+  keepValuesOnUnmount: true,
 })
 
 const { asyncCreateEventMutation, asyncUpdateEventMutation } = useEventsModel(
@@ -101,6 +143,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
   }
 
   if (!props.eventData) {
@@ -116,6 +159,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
   }
   await asyncUpdateEventMutation(updatePayload, {
     onSuccess: () => emits("success", updatePayload.title || ""),
@@ -129,6 +173,12 @@ const isDeletingEvent = useIsMutating({
 const isPerformingAction = computed(() => {
   return !!isDeletingEvent.value || form.isSubmitting.value
 })
+
+const computedDelayLabel = computed(() => {
+  if (!form.values.repeatConfig) return "Повторять раз в"
+
+  return `Повторять ${form.values.repeatConfig.delay} раз в XYZ`
+})
 </script>
 
 <template>
@@ -138,7 +188,40 @@ const isPerformingAction = computed(() => {
     :inert="!!isPerformingAction"
     :form="form"
     :schema="formSchema"
+    :dependencies="[
+      {
+        sourceField: 'repeatConfig.repeatType',
+        type: DependencyType.HIDES,
+        targetField: 'repeatConfig.weekDays',
+        when: (type: RepeatTypes) => !type || type !== RepeatTypes.Weekly,
+      } as any,
+      {
+        sourceField: 'isRepeated',
+        type: DependencyType.HIDES,
+        targetField: 'repeatConfig',
+        when: (r: boolean) => !r,
+      } as any,
+    ]"
     :field-config="{
+      repeatConfig: {
+        repeatType: {
+          component: RepeatTypeSelector,
+          label: 'Тип повторения',
+        },
+        weekDays: {
+          component: WeekDaySelector,
+          label: 'Дни недели',
+        },
+        delay: {
+          label: computedDelayLabel,
+        },
+        repeatUntil: {
+          label: 'Повторять до',
+        },
+      } as any,
+      isRepeated: {
+        label: 'Сделать повторяющимся?',
+      },
       date: {
         label: 'Дата',
         disabled: !!props.initialDate,

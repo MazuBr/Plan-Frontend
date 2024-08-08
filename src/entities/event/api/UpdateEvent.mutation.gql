@@ -1,4 +1,4 @@
-mutation UpdateEvent($input: CalendaUpdateEvents!) {
+mutation UpdateEvent($input: CalendarUpdateEvents!) {
   updateEvent(input: $input) {
     eventId
     title

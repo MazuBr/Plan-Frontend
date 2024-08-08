@@ -9,6 +9,12 @@ query GetCalendarMonth($epochStart: Int!, $epochEnd: Int!, $tz: String!) {
       comment
       dayEventStart
       endTime
+      repeat {
+        repeatData
+        repeatUntil
+        delay
+        repeatType
+      }
     }
   }
 }

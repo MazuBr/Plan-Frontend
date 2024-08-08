@@ -1,3 +1,4 @@
+import { DaysOfWeek, daysOfWeek } from "@/entities/event/model"
 import { CalendarDate } from "@internationalized/date"
 
 const options = {
@@ -15,6 +16,39 @@ export function isoToEpoch(iso?: string) {
   if (!iso) throw new Error("invalid iso")
 
   return Math.floor(new Date(iso).getTime() / 1000)
+}
+
+export function getTranslatedDay(day: DaysOfWeek, full?: boolean) {
+  const _dict: Record<DaysOfWeek, string> = full
+    ? {
+        FRIDAY: "Пятница",
+        MONDAY: "Понедельник",
+        SATURDAY: "Суббота",
+        SUNDAY: "Воскресенье",
+        THURSDAY: "Четверг",
+        TUESDAY: "Вторник",
+        WEDNESDAY: "Среда",
+      }
+    : {
+        FRIDAY: "Пт",
+        MONDAY: "Пн",
+        SATURDAY: "Сб",
+        SUNDAY: "Вс",
+        THURSDAY: "Чт",
+        TUESDAY: "Вт",
+        WEDNESDAY: "Ср",
+      }
+
+  return _dict[day] || "..."
+}
+
+export function getWeekDayByDate(
+  date: string,
+  options?: { full?: boolean; translated?: boolean }
+) {
+  return options?.translated
+    ? getTranslatedDay(daysOfWeek.at(new Date(date).getDay())!, options?.full)
+    : daysOfWeek.at(new Date(date).getDay())!
 }
 
 export function getISOWeekNumber(date: string) {
