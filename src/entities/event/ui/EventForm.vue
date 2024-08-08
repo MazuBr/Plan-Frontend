@@ -56,7 +56,9 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          weekDays: z
+            .array(z.nativeEnum(DaysOfWeek))
+            .nonempty({ message: "Укажите как минимум 1 день" }),
           delay: z
             .number({
               invalid_type_error: "Введите целое число",
@@ -91,7 +93,9 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          weekDays: z
+            .array(z.nativeEnum(DaysOfWeek))
+            .nonempty({ message: "Укажите как минимум 1 день" }),
           delay: z
             .number({
               invalid_type_error: "Введите целое число",

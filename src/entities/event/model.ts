@@ -152,20 +152,44 @@ export function getRepeatInput(values: {
     delay: values.repeatConfig?.delay,
     repeatUntil: isoToEpoch(values.repeatConfig!.repeatUntil.toString()),
     repeatType: values.repeatConfig!.repeatType,
-    repeatData: JSON.stringify({
-      monthlyByWeek:
-        values.repeatConfig?.repeatType === RepeatTypes.MonthlyByWeek
-          ? {
-              daysOfWeek: getWeekDayByDate(values.date!.toString()),
-              week: getISOWeekNumber(values.date!.toString()),
-            }
-          : undefined,
-      weekly:
-        values.repeatConfig?.repeatType === RepeatTypes.Weekly
-          ? { daysOfWeek: values.repeatConfig.weekDays }
-          : undefined,
-    }),
+    repeatData: getRepeatData(values),
   }
+}
+
+function getRepeatData(values: {
+  title?: string
+  startTime?: string
+  endTime?: string
+  comment?: string | undefined
+  date?: Date | undefined
+  repeatConfig?:
+    | {
+        repeatType: RepeatTypes
+        weekDays: DaysOfWeek[]
+        delay: number
+        repeatUntil: Date
+      }
+    | undefined
+}) {
+  const repeatDataObj = {
+    monthlyByWeek:
+      values.repeatConfig?.repeatType === RepeatTypes.MonthlyByWeek
+        ? {
+            daysOfWeek: getWeekDayByDate(values.date!.toString()),
+            week: getISOWeekNumber(values.date!.toString()),
+          }
+        : undefined,
+    weekly:
+      values.repeatConfig?.repeatType === RepeatTypes.Weekly
+        ? { daysOfWeek: values.repeatConfig.weekDays }
+        : undefined,
+  }
+
+  console.log(repeatDataObj)
+
+  return Object.values(repeatDataObj).filter(Boolean).length !== 0
+    ? JSON.stringify(repeatDataObj)
+    : undefined
 }
 
 export const useEventsModel = (event?: CalendarData["events"][number]) => {

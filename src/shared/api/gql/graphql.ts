@@ -1,4 +1,3 @@
-/* eslint-disable */
 // prettier-ignore
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
