@@ -44,9 +44,7 @@ const formSchema = !props.eventData
         .min(1, { message: "Заголовок обязателен" })
         .describe("Название"),
       comment: z.string().describe("Описание").optional(),
-      date: z.coerce
-        .date({ required_error: "Дата обязательна" })
-        .default(props.initialDate as any),
+      date: z.coerce.date({ required_error: "Дата обязательна" }),
       startTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время начала"),
@@ -98,6 +96,9 @@ onMounted(() => {
   if (!props.eventData) {
     form.resetForm({
       values: {
+        date: props.initialDate
+          ? (parseDate(props.initialDate?.toString()) as never as Date)
+          : undefined,
         repeatConfig: {
           delay: REPEAT_DEFAULTS.DELAY,
           repeatType: REPEAT_DEFAULTS.REPEAT_TYPE,
@@ -142,7 +143,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : null,
   }
 
   if (!props.eventData) {
@@ -158,7 +159,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : null,
   }
   await asyncUpdateEventMutation(updatePayload, {
     onSuccess: () => emits("success", updatePayload.title || ""),

@@ -144,7 +144,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
     mutationFn: (payload: CalendarCreateEvent) =>
       eventService.mutations.createEvent(payload),
-    onSuccess(data, variables) {
+    async onSuccess(data, variables) {
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         variables.startTime * 1000
       )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
@@ -170,7 +170,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
           : undefined,
       })
 
-      return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+      return await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
     },
   })
 
@@ -181,7 +181,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
     mutationFn: (payload: CalendarUpdateEvents) =>
       eventService.mutations.updateEvent(payload),
-    onSuccess(data, variables) {
+    async onSuccess(data, variables) {
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         (variables.startTime || Date.now()) * 1000
       )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
@@ -213,7 +213,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
         },
       })
 
-      return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+      return await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
     },
   })
 
@@ -227,7 +227,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
       mutationFn: (eventIds: number[]) =>
         eventService.mutations.deleteEvents(eventIds),
 
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         toast("Событие было удалено", {
           action: {
             label: "Отмена",
@@ -247,7 +247,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
         removeManualEventById(data.deleteEvent.ids[0])
 
-        return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+        return await tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
       },
     })
 
