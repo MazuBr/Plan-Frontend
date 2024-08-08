@@ -8,20 +8,20 @@ import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
 import { AutoForm } from "@/shared/ui/design/ui/auto-form"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { toTypedSchema } from "@vee-validate/zod"
-import { GenericObject, useField, useFieldArray, useForm } from "vee-validate"
+import { GenericObject, useForm } from "vee-validate"
 import { z } from "zod"
 import { DateValue, parseDate } from "@internationalized/date"
 import {
-  getDateValueByTimestamp,
   getLocalStartTimeByTimestamp,
   isoToEpoch,
 } from "@/shared/lib/date-utils"
 import { CalendarData } from "@/entities/schedule/api"
 import DeleteEventTrigger from "./DeleteEventTrigger.vue"
 import { useIsMutating } from "@tanstack/vue-query"
-import { computed, onMounted, provide } from "vue"
+import { computed, onMounted } from "vue"
 import {
   DaysOfWeek,
+  determineDelayLabel,
   getRepeatConfig,
   getRepeatInput,
   REPEAT_DEFAULTS,
@@ -45,9 +45,7 @@ const formSchema = !props.eventData
         .min(1, { message: "Заголовок обязателен" })
         .describe("Название"),
       comment: z.string().describe("Описание").optional(),
-      date: z.coerce
-        .date({ required_error: "Дата обязательна" })
-        .default(props.initialDate as any),
+      date: z.coerce.date({ required_error: "Дата обязательна" }),
       startTime: z
         .string({ required_error: "Время обязательно" })
         .describe("Время начала"),
@@ -58,8 +56,14 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
-          delay: z.number(),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          delay: z
+            .number({
+              invalid_type_error: "Введите целое число",
+              required_error: "Периодичность обязательна",
+            })
+            .positive({ message: "Введите положительное целое число" })
+            .int({ message: "Введите положительное целое число" }),
           repeatUntil: z.coerce.date(),
         })
         .describe("Настройка повторения")
@@ -87,8 +91,14 @@ const formSchema = !props.eventData
       repeatConfig: z
         .object({
           repeatType: z.nativeEnum(RepeatTypes),
-          weekDays: z.array(z.nativeEnum(DaysOfWeek)),
-          delay: z.number(),
+          weekDays: z.array(z.nativeEnum(DaysOfWeek)).nonempty().optional(),
+          delay: z
+            .number({
+              invalid_type_error: "Введите целое число",
+              required_error: "Периодичность обязательна",
+            })
+            .positive({ message: "Введите положительное целое число" })
+            .int({ message: "Введите положительное целое число" }),
           repeatUntil: z.coerce.date(),
         })
         .describe("Настройка повторения")
@@ -99,11 +109,18 @@ onMounted(() => {
   if (!props.eventData) {
     form.resetForm({
       values: {
+        date: props.initialDate
+          ? (parseDate(props.initialDate?.toString()) as never as Date)
+          : undefined,
         repeatConfig: {
           delay: REPEAT_DEFAULTS.DELAY,
           repeatType: REPEAT_DEFAULTS.REPEAT_TYPE,
-          weekDays: REPEAT_DEFAULTS.WEEK_DAYS,
-          repeatUntil: REPEAT_DEFAULTS.REPEAT_UNTIL,
+          weekDays: REPEAT_DEFAULTS.getRelativeDefaultWeekDays(
+            props.initialDate?.toString()
+          ),
+          repeatUntil: REPEAT_DEFAULTS.getRelativeDefaultRepeatUntil(
+            props.initialDate?.toString()
+          ),
         },
       },
     })
@@ -143,7 +160,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : null,
   }
 
   if (!props.eventData) {
@@ -159,7 +176,7 @@ async function onSubmit(values: GenericObject) {
     comment: values.comment,
     startTime: startTime,
     endTime: endTime,
-    repeat: values.isRepeated ? getRepeatInput(values as any) : undefined,
+    repeat: values.isRepeated ? getRepeatInput(values as any) : null,
   }
   await asyncUpdateEventMutation(updatePayload, {
     onSuccess: () => emits("success", updatePayload.title || ""),
@@ -175,9 +192,10 @@ const isPerformingAction = computed(() => {
 })
 
 const computedDelayLabel = computed(() => {
-  if (!form.values.repeatConfig) return "Повторять раз в"
-
-  return `Повторять ${form.values.repeatConfig.delay} раз в XYZ`
+  return determineDelayLabel(
+    form.values.repeatConfig?.delay,
+    form.values.repeatConfig?.repeatType
+  )
 })
 </script>
 

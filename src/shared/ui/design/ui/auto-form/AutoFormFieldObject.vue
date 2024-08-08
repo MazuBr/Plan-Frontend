@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T extends ZodRawShape">
 import type { ZodAny, ZodObject, ZodRawShape } from "zod"
-import { computed, onMounted, provide, ref } from "vue"
-import { FieldContextKey, FormMeta, useField, useForm } from "vee-validate"
+import { computed, provide, ref } from "vue"
+import { FieldContextKey, useField } from "vee-validate"
 import AutoFormField from "./AutoFormField.vue"
 import type { Config, ConfigItem, Shape } from "./interface"
 import {

@@ -66,7 +66,7 @@ function isAccessTokenFresh({
     if (!decodedToken.exp) return false
 
     return decodedToken.exp > nowTime
-  } catch (e) {
+  } catch {
     return false
   }
 }

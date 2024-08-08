@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue"
+import { defineAsyncComponent } from "vue"
 import { RouterView } from "vue-router"
 
 import AuthLayout from "../shared/ui/AuthLayout.vue"

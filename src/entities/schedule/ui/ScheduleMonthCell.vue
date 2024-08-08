@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/shared/ui/design/ui/popover"
 import { CalendarData } from "../api"
-import { inject, ref } from "vue"
+import { ref } from "vue"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
 import { LocationQuery } from "vue-router"

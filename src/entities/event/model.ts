@@ -18,6 +18,7 @@ import { eventService } from "./api"
 import { removeManualEventById } from "../schedule/model"
 import { CalendarData } from "../schedule/api"
 import { parseDate } from "@internationalized/date"
+import plural from "plural-ru"
 
 export enum DaysOfWeek {
   Friday = "FRIDAY",
@@ -42,7 +43,24 @@ export const daysOfWeek: DaysOfWeek[] = [
 export const REPEAT_DEFAULTS = {
   DELAY: 1,
   REPEAT_TYPE: RepeatTypes.Daily,
-  WEEK_DAYS: [],
+  WEEK_DAYS: [DaysOfWeek.Monday] as [DaysOfWeek, ...DaysOfWeek[]],
+
+  getRelativeDefaultRepeatUntil(date?: string) {
+    if (!date) return this.REPEAT_UNTIL
+
+    return parseDate(new Date(date).toISOString().slice(0, 10)).add({
+      years: 1,
+    }) as unknown as Date
+  },
+
+  getRelativeDefaultWeekDays(date?: string): [DaysOfWeek, ...DaysOfWeek[]] {
+    if (!date) return [DaysOfWeek.Monday]
+
+    return [getWeekDayByDate(date, { full: false, translated: false })] as [
+      DaysOfWeek,
+      ...DaysOfWeek[],
+    ]
+  },
 
   get REPEAT_UNTIL() {
     return parseDate(new Date().toISOString().slice(0, 10)).add({
@@ -77,12 +95,12 @@ function tryParseWeekdays(repeatData?: string | null) {
   try {
     const parsedRepeatData: {
       weekly: {
-        daysOfWeek: DaysOfWeek[]
+        daysOfWeek: [DaysOfWeek, ...DaysOfWeek[]]
       }
     } = JSON.parse(repeatData)
 
     return parsedRepeatData.weekly.daysOfWeek
-  } catch (e) {
+  } catch {
     return REPEAT_DEFAULTS.WEEK_DAYS
   }
 }
@@ -99,6 +117,20 @@ function eventRepeatToInputRepeat(
     ),
     repeatData: eventRepeat.repeatData,
   }
+}
+
+export function determineDelayLabel(delay?: number, type?: RepeatTypes) {
+  if (!delay || !type) return "Повторять с периодичностью"
+
+  const pluralTypeTranslate: Record<RepeatTypes, string> = {
+    DAILY: plural(delay, "%d день", "%d дня", "%d дней"),
+    WEEKLY: plural(delay, "%d неделю", "%d недели", "%d недель"),
+    MONTHLY: plural(delay, "%d месяц", "%d месяца", "%d месяцев"),
+    MONTHLY_BY_WEEK: plural(delay, "%d месяц", "%d месяца", "%d месяцев"),
+    YEARLY: plural(delay, "%d год", "%d года", "%d лет"),
+  }
+
+  return `Повторять с периодичностью ${pluralTypeTranslate[type]}`
 }
 
 export function getRepeatInput(values: {
@@ -144,7 +176,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
     mutationFn: (payload: CalendarCreateEvent) =>
       eventService.mutations.createEvent(payload),
-    onSuccess(data, variables) {
+    async onSuccess(data, variables) {
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         variables.startTime * 1000
       )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
@@ -170,7 +202,9 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
           : undefined,
       })
 
-      return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+      return await tanstackQueryClient.invalidateQueries({
+        queryKey: ["calendar"],
+      })
     },
   })
 
@@ -181,7 +215,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
     mutationFn: (payload: CalendarUpdateEvents) =>
       eventService.mutations.updateEvent(payload),
-    onSuccess(data, variables) {
+    async onSuccess(data, variables) {
       const toastMessage = `Событие «${variables.title}», даты ${prettifyTimestamp(
         (variables.startTime || Date.now()) * 1000
       )} - ${prettifyTimestamp((variables.endTime || Date.now()) * 1000)}`
@@ -213,7 +247,9 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
         },
       })
 
-      return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+      return await tanstackQueryClient.invalidateQueries({
+        queryKey: ["calendar"],
+      })
     },
   })
 
@@ -227,7 +263,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
       mutationFn: (eventIds: number[]) =>
         eventService.mutations.deleteEvents(eventIds),
 
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         toast("Событие было удалено", {
           action: {
             label: "Отмена",
@@ -247,7 +283,9 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
 
         removeManualEventById(data.deleteEvent.ids[0])
 
-        return tanstackQueryClient.invalidateQueries({ queryKey: ["calendar"] })
+        return await tanstackQueryClient.invalidateQueries({
+          queryKey: ["calendar"],
+        })
       },
     })
 

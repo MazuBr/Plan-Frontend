@@ -11,7 +11,7 @@ const config: CodegenConfig = {
         "typescript",
         {
           add: {
-            content: "/* eslint-disable */\n// prettier-ignore",
+            content: "// prettier-ignore",
           },
         },
       ],

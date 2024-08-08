@@ -63,16 +63,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import("../calendar/CalendarPage.vue"),
   },
   {
-    path: "/dashboard",
-    name: "dashboard",
-    component: () => import("../dashboard/Dashboard.vue"),
-    meta: {
-      breadCrumb: "Дашборд",
-      label: "Дашборд",
-      visible: true,
-    },
-  },
-  {
     path: "/:catchAll(.*)",
     name: "NotFound",
     component: () => import("../not-found/PageNotFound.vue"),

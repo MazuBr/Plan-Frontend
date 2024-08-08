@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   Dialog,
-  DialogContent,
   DialogHeader,
   DialogScrollContent,
   DialogTitle,

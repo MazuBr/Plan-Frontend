@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { RepeatTypes } from "@/shared/api/gql/graphql"
 import { getISOWeekNumber, getWeekDayByDate } from "@/shared/lib/date-utils"
-import {
-  AutoFormLabel,
-  Config,
-  FieldProps,
-} from "@/shared/ui/design/ui/auto-form"
+import { AutoFormLabel, FieldProps } from "@/shared/ui/design/ui/auto-form"
 import { beautifyObjectName } from "@/shared/ui/design/ui/auto-form/utils"
-import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { Label } from "@/shared/ui/design/ui/label"
 import RadioGroup from "@/shared/ui/design/ui/radio-group/RadioGroup.vue"
 import RadioGroupItem from "@/shared/ui/design/ui/radio-group/RadioGroupItem.vue"
@@ -45,9 +40,78 @@ function getMonthlyDescriptor() {
   return `Ежемесячно ${formValues.value.date.day} числа`
 }
 
+function getDeclinatedWeekday(weedDay: string) {
+  switch (weedDay) {
+    case "MONDAY":
+    case "Понедельник":
+    case "Пн":
+      return "Понедельник"
+    case "TUESDAY":
+    case "Вторник":
+    case "Вт":
+      return "Вторник"
+    case "THURSDAY":
+    case "Четверг":
+    case "Чт":
+      return "Четверг"
+    case "SUNDAY":
+    case "Воскресенье":
+    case "Вс":
+      return "Воскресенье"
+
+    case "WEDNESDAY":
+    case "Среда":
+    case "Ср":
+      return "Среду"
+    case "FRIDAY":
+    case "Пятница":
+    case "Пт":
+      return "Пятницу"
+    case "SATURDAY":
+    case "Суббота":
+    case "Сб":
+      return "Субботу"
+
+    default:
+      return ""
+  }
+}
+
 function getMonthlyByWeekDescriptor() {
   const date = formValues.value.date.toString()
-  return `Ежемесячно каждый ${getISOWeekNumber(date)} ${getWeekDayByDate(date, { full: true, translated: true })}`
+  const weekDay = getWeekDayByDate(date, { full: true, translated: true })
+
+  switch (weekDay) {
+    case "WEDNESDAY":
+    case "Среда":
+    case "Ср":
+    case "FRIDAY":
+    case "Пятница":
+    case "Пт":
+    case "SATURDAY":
+    case "Суббота":
+    case "Сб":
+      return `Ежемесячно каждую ${getISOWeekNumber(date)} ${getDeclinatedWeekday(weekDay)}`
+
+    case "MONDAY":
+    case "Понедельник":
+    case "Пн":
+    case "TUESDAY":
+    case "Вторник":
+    case "Вт":
+    case "THURSDAY":
+    case "Четверг":
+    case "Чт":
+      return `Ежемесячно каждый ${getISOWeekNumber(date)} ${getDeclinatedWeekday(weekDay)}`
+
+    case "SUNDAY":
+    case "Воскресенье":
+    case "Вс":
+      return `Ежемесячно каждое ${getISOWeekNumber(date)} ${getDeclinatedWeekday(weekDay)}`
+
+    default:
+      return ""
+  }
 }
 
 function getTranslatedType(type: RepeatTypes) {
