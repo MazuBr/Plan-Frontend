@@ -2,6 +2,7 @@ import { tanstackQueryClient } from "@/main"
 import {
   CalendarCreateEvent,
   CalendarUpdateEvents,
+  EventStatus,
   InputMaybe,
   InputRepeat,
   RepeatTypes,
@@ -72,6 +73,15 @@ export const REPEAT_DEFAULTS = {
 export function getRepeatConfig(
   repeat: CalendarData["events"][number]["repeat"]
 ) {
+  if (!repeat) {
+    return {
+      delay: REPEAT_DEFAULTS.DELAY,
+      repeatType: REPEAT_DEFAULTS.REPEAT_TYPE,
+      repeatUntil: REPEAT_DEFAULTS.REPEAT_UNTIL,
+      weekDays: REPEAT_DEFAULTS.WEEK_DAYS,
+    }
+  }
+
   return {
     delay: repeat.delay || REPEAT_DEFAULTS.DELAY,
     repeatType: repeat.repeatType || REPEAT_DEFAULTS.REPEAT_TYPE,
@@ -108,6 +118,8 @@ function tryParseWeekdays(repeatData?: string | null) {
 function eventRepeatToInputRepeat(
   eventRepeat: CalendarData["events"][number]["repeat"]
 ): CalendarUpdateEvents["repeat"] {
+  if (!eventRepeat) return
+
   return {
     repeatType: eventRepeat.repeatType || REPEAT_DEFAULTS.REPEAT_TYPE,
     delay: eventRepeat.delay || REPEAT_DEFAULTS.DELAY,
@@ -259,6 +271,7 @@ export const useEventsModel = (event?: CalendarData["events"][number]) => {
                 repeat: event?.repeat
                   ? eventRepeatToInputRepeat(event.repeat)
                   : undefined,
+                eventStatus: EventStatus.Active,
               })
               .then((r) => {
                 toast.success(

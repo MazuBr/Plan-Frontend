@@ -65,7 +65,7 @@ export type CalendarHumanReadable = {
   endTime?: Maybe<Scalars['DateTime']['output']>;
   eventStatus: EventStatus;
   id: Scalars['Int']['output'];
-  repeat: Repeat;
+  repeat?: Maybe<Repeat>;
   title: Scalars['String']['output'];
 };
 

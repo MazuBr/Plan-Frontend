@@ -2,6 +2,7 @@
 import {
   CalendarCreateEvent,
   CalendarUpdateEvents,
+  EventStatus,
   RepeatTypes,
 } from "@/shared/api/gql/graphql"
 import { AnimatedText } from "@/shared/ui/design/ui/animated-text"
@@ -181,6 +182,7 @@ async function onSubmit(values: GenericObject) {
     startTime: startTime,
     endTime: endTime,
     repeat: values.isRepeated ? getRepeatInput(values as any) : null,
+    eventStatus: EventStatus.Active,
   }
   await asyncUpdateEventMutation(updatePayload, {
     onSuccess: () => emits("success", updatePayload.title || ""),
