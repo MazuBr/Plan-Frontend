@@ -5,6 +5,7 @@ import Button from "@/shared/ui/design/ui/button/Button.vue"
 import { useField } from "vee-validate"
 import { DaysOfWeek, daysOfWeek } from "../model"
 import { getTranslatedDay } from "@/shared/lib/date-utils"
+import { FormMessage } from "@/shared/ui/design/ui/form"
 
 const props = defineProps<
   FieldProps & {
@@ -51,6 +52,9 @@ function isSelected(val: DaysOfWeek) {
         @click="select(day)"
         >{{ getTranslatedDay(day) }}</Button
       >
+    </div>
+    <div v-if="$props.required" class="h-4">
+      <FormMessage />
     </div>
   </div>
 </template>

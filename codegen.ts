@@ -33,7 +33,7 @@ const config: CodegenConfig = {
         },
         {
           add: {
-            content: "/* eslint-disable */\n// prettier-ignore",
+            content: "// prettier-ignore",
           },
         },
         "typed-document-node",
