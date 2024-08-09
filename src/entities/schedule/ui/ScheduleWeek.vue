@@ -85,6 +85,7 @@ function handleDecrement(dv: DateValue) {
         <CalendarNextButton
           :next-page="currentWeekIndex === 4 ? undefined : handleIncrement"
         />
+        <span class="italic">(Работа в процессе)</span>
       </CalendarHeader>
 
       <div>

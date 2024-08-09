@@ -163,8 +163,8 @@ async function onSubmit(values: GenericObject) {
   const createPayload: CalendarCreateEvent = {
     title: values.title,
     comment: values.comment,
-    startTime: startTime,
-    endTime: endTime,
+    startTime: Math.min(startTime, endTime),
+    endTime: Math.max(startTime, endTime),
     repeat: values.isRepeated ? getRepeatInput(values as any) : null,
   }
 
@@ -179,8 +179,8 @@ async function onSubmit(values: GenericObject) {
     eventId: props.eventData.id,
     title: values.title,
     comment: values.comment,
-    startTime: startTime,
-    endTime: endTime,
+    startTime: Math.min(startTime, endTime),
+    endTime: Math.max(startTime, endTime),
     repeat: values.isRepeated ? getRepeatInput(values as any) : null,
     eventStatus: EventStatus.Active,
   }
