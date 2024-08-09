@@ -66,7 +66,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
           <CalendarGridRow
             v-for="(weekDates, index) in month.rows"
             :key="`weekDate-${index}`"
-            class="mt-2 w-full"
+            class="mt-2 w-full select-none"
           >
             <CalendarCell
               v-for="weekDate in weekDates"
