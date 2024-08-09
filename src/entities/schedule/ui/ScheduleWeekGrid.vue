@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { DateValue } from "@internationalized/date"
 import ScheduleDayCell from "./ScheduleDayCell.vue"
+import { daysOfWeek } from "@/entities/event/model"
+import { getTranslatedDay } from "@/shared/lib/date-utils"
+import { getDayEvents, useFetchScheduleForCalendar } from "../model"
 
-defineProps<{ days: string[]; grid: DateValue[] }>()
+const props = defineProps<{ days: string[]; grid: DateValue[] }>()
+
+const { scheduleQuery } = useFetchScheduleForCalendar(
+  () => [{ cells: props.grid }] as any
+)
 
 function getScheduleTime() {
   return Array(24)
@@ -12,16 +19,35 @@ function getScheduleTime() {
 </script>
 
 <template>
-  <div class="calendar-grid-week bg-monochrome-2" >
+  <div
+    class="calendar-grid-week bg-monochrome-2"
+    :class="scheduleQuery.isLoading.value ? 'opacity-50' : 'opacity-100'"
+  >
     <div></div>
-    <div v-for="weekDay in days" class="bg-monochrome-2 text-center">
-      {{ weekDay }}
+    <div v-for="(weekDay, idx) in daysOfWeek" class="bg-monochrome-2">
+      <div class="flex gap-2 justify-center">
+        <span> {{ getTranslatedDay(weekDay) }} </span>
+        <span>
+          {{ grid[idx].day.toString().padStart(2, "0") }}
+        </span>
+      </div>
     </div>
     <div class="flex w-full gap-[1px] flex-col text-right">
       <div v-for="h in getScheduleTime()" class="h-12 text-sm">{{ h }}</div>
     </div>
-    <div v-for="day in grid" :class="$route.query.date === day.toString() ? 'border border-monochrome-6 rounded-md' : ''">
-      <ScheduleDayCell :full-day="day.toString()" />
+    <div
+      v-for="day in grid"
+      :class="
+        $route.query.date === day.toString()
+          ? 'border border-monochrome-6 rounded-md'
+          : ''
+      "
+    >
+      <ScheduleDayCell
+        :key="getDayEvents(day).length"
+        :events="getDayEvents(day)"
+        :full-day="day.toString()"
+      />
     </div>
   </div>
 </template>
