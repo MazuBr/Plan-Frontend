@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { computed, onMounted } from "vue"
 import { CalendarData } from "../api"
 import { getHoursAndMinutes } from "@/shared/lib/date-utils"
+import { useColorMode } from "@vueuse/core"
+import { getMonochromeHex } from "@/shared/lib/tailwind-property-getter"
+import { cn } from "@/shared/lib/utils"
 
-const props = defineProps<{ fullDay: string; events: CalendarData["events"] }>()
+const props = defineProps<{
+  fullDay: string
+  events: CalendarData["events"]
+  dark?: boolean
+}>()
 
 onMounted(() => {
   props.events.forEach((event) => {
@@ -40,13 +47,29 @@ onMounted(() => {
     }
   })
 })
+
+const mode = useColorMode()
+const comptedStyle = computed(() =>
+  mode.value === "dark"
+    ? getMonochromeHex(10)
+    : mode.value === "light"
+      ? getMonochromeHex(4)
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? getMonochromeHex(10)
+        : getMonochromeHex(1)
+)
 </script>
 
 <template>
   <div class="flex w-full gap-[1px] flex-col" :id="'d' + fullDay.split('-')[2]">
     <div
       v-for="h in 24"
-      class="relative h-12 bg-monochrome-1 text-[14px] hour-grid"
+      :class="
+        cn(
+          'relative h-12 bg-monochrome-1 dark:bg-monochrome-9 text-[14px] hour-grid',
+          dark ? comptedStyle : ''
+        )
+      "
     >
       <div v-for="(hs, idx) in 60" :data-time-value="[h - 1, idx]"></div>
     </div>

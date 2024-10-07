@@ -9,6 +9,7 @@ import ScheduleDay from "../../entities/schedule/ui/ScheduleDay.vue"
 import ScheduleWeek from "@/entities/schedule/ui/ScheduleWeek.vue"
 import ScheduleModeSelector from "@/entities/schedule/ui/ScheduleModeSelector.vue"
 import { useScheduleMode } from "@/entities/schedule/model"
+import DarkModeToggle from "@/shared/ui/DarkModeToggle.vue"
 
 const session = useSessionState()
 const scheduleMode = useScheduleMode()
@@ -31,8 +32,9 @@ const scheduleComponent = computed(() => {
         <div class="type-fix w-80">
           <div class="h-full flex flex-col justify-between">
             <Calendar />
-            <div>
+            <div class="flex gap-3">
               <Button @click="() => session.logout()">Выйти из системы</Button>
+              <DarkModeToggle />
             </div>
           </div>
         </div>

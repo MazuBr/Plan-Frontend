@@ -10,6 +10,7 @@ import { ref } from "vue"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
 import { LocationQuery } from "vue-router"
+import { useColorMode } from "@vueuse/core"
 
 const props = withDefaults(
   defineProps<{
@@ -25,11 +26,15 @@ const props = withDefaults(
 
 const popoverOpened = ref(false)
 
+const mode = useColorMode()
 function applySelection(query: LocationQuery) {
   if (props.notSameMonth) return "opacity-50"
 
   if (props.fullDay === query.date)
-    return "border border-monochrome-6 rounded-md"
+    return mode.value === "dark" ||
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "border border-monochrome-10 rounded-md"
+      : "border border-monochrome-6 rounded-md"
 }
 </script>
 
@@ -40,7 +45,7 @@ function applySelection(query: LocationQuery) {
   >
     <div>
       <div class="text-right">
-        <span class="text-monochrome-7">{{ day }}</span>
+        <span class="text-monochrome-7 dark:text-monochrome-2">{{ day }}</span>
       </div>
 
       <div @click.stop>

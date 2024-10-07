@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useSlots } from "vue"
 import { getMonochromeHex } from "../lib/tailwind-property-getter"
+import { useColorMode } from "@vueuse/core"
 
 const props = withDefaults(
   defineProps<{
@@ -14,6 +15,8 @@ const props = withDefaults(
   }
 )
 
+const mode = useColorMode()
+
 defineExpose({
   setSidebarState,
 })
@@ -21,7 +24,13 @@ defineExpose({
 const backgroundColor = computed(() => {
   if (props.forceDark) return getMonochromeHex(9)
 
-  return getMonochromeHex(1)
+  return mode.value === "light"
+    ? getMonochromeHex(1)
+    : mode.value === "dark"
+      ? getMonochromeHex(9)
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? getMonochromeHex(9)
+        : getMonochromeHex(1)
 })
 
 const activeSidebar = ref(props.activeSidebarDefault)
@@ -43,7 +52,7 @@ function setSidebarState(val: boolean | null) {
 </script>
 
 <template>
-  <div class="ui-layout-container">
+  <div class="ui-layout-container dark:border dark:border-l-0 dark:border-t-0 border border-monochrome-4 dark:border-monochrome-9.5">
     <aside
       v-if="hasLeftSidebar"
       aria-label="Main Layout left sidebar"
