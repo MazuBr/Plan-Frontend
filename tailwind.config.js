@@ -40,6 +40,9 @@ export default {
         "monochrome-8": "#343A40",
         "monochrome-8.5": "#2B3035",
         "monochrome-9": "#212529",
+        "monochrome-9.5": "#161B20", // 0x21 + 0x0a
+        "monochrome-10": "#0B1014", // 0x16 + 0x0a
+        "monochrome-10.5": "#000509", // 0x0b + 0x0a
 
         primary: "#0AA0BF",
         progress: "#0AA0BF",

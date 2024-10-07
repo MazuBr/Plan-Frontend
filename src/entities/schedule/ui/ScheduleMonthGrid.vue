@@ -36,17 +36,17 @@ function determineIfNotSameMonth(month: number) {
 
 <template>
   <div
-    class="calendar-grid h-full bg-monochrome-2"
+    class="calendar-grid h-full bg-monochrome-2 dark:bg-monochrome-9.5"
     :class="scheduleQuery.isLoading.value ? 'opacity-50' : 'opacity-100'"
   >
-    <div v-for="day in days" :key="day" class="bg-monochrome-2 text-center h-8">
+    <div v-for="day in days" :key="day" class="bg-monochrome-2 dark:bg-monochrome-9.5 text-center h-8">
       {{ day }}
     </div>
 
     <div
       v-for="cell in calendarGrid[0].cells"
       :key="cell.toString()"
-      class="bg-monochrome-1 hover:bg-monochrome-2"
+      class="bg-monochrome-1 dark:bg-monochrome-8 hover:bg-monochrome-2 dark:hover:bg-monochrome-9.5"
     >
       <CreateEventDialog :initial-date="cell">
         <template #trigger>

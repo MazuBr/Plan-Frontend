@@ -20,11 +20,11 @@ function getScheduleTime() {
 
 <template>
   <div
-    class="calendar-grid-week bg-monochrome-2"
+    class="calendar-grid-week bg-monochrome-2 dark:bg-monochrome-9.5"
     :class="scheduleQuery.isLoading.value ? 'opacity-50' : 'opacity-100'"
   >
     <div></div>
-    <div v-for="(weekDay, idx) in daysOfWeek" class="bg-monochrome-2">
+    <div v-for="(weekDay, idx) in daysOfWeek" class="bg-monochrome-2 dark:bg-monochrome-8">
       <div class="flex gap-2 justify-center">
         <span> {{ getTranslatedDay(weekDay) }} </span>
         <span>
@@ -37,15 +37,11 @@ function getScheduleTime() {
     </div>
     <div
       v-for="day in grid"
-      :class="
-        $route.query.date === day.toString()
-          ? 'border border-monochrome-6 rounded-md'
-          : ''
-      "
     >
       <ScheduleDayCell
         :key="getDayEvents(day).length"
         :events="getDayEvents(day)"
+        :dark="$route.query.date === day.toString()"
         :full-day="day.toString()"
       />
     </div>

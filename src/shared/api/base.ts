@@ -1,6 +1,6 @@
 import { useSessionState } from "@/entities/user/model"
-import { RestApi } from "./restApi"
-import axios from "axios"
+import { RefreshTokenResponse, RestApi } from "./restApi"
+import axios, { AxiosResponse } from "axios"
 import { jwtDecode } from "jwt-decode"
 import { GraphQLClient, RequestMiddleware } from "graphql-request"
 import { toast } from "vue-sonner"
@@ -92,7 +92,7 @@ async function requestValidAccessToken() {
         loading: "Автоматическое продление сессии",
         description: "Работа вскоре возобновится",
         position: "top-center",
-        success(data) {
+        success(data: AxiosResponse<RefreshTokenResponse, any>) {
           const jwt = data.data.access_token.token
           accessToken = jwt
           localStorage.setItem("jwt", jwt)
