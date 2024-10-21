@@ -32,3 +32,5 @@ createApp(App)
   .use(router)
   .use(VueQueryPlugin, vueQueryPluginOptions)
   .mount("#app")
+
+console.log("TEst")
