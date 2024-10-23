@@ -2,9 +2,8 @@
 import { computed, onMounted } from "vue"
 import { CalendarData } from "../api"
 import { getHoursAndMinutes } from "@/shared/lib/date-utils"
-import { useColorMode } from "@vueuse/core"
-import { getMonochromeHex } from "@/shared/lib/tailwind-property-getter"
 import { cn } from "@/shared/lib/utils"
+import { getMonochromeByTheme } from "@/shared/lib/theme-manager"
 
 const props = defineProps<{
   fullDay: string
@@ -48,15 +47,8 @@ onMounted(() => {
   })
 })
 
-const mode = useColorMode()
 const comptedStyle = computed(() =>
-  mode.value === "dark"
-    ? getMonochromeHex(10)
-    : mode.value === "light"
-      ? getMonochromeHex(4)
-      : window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? getMonochromeHex(10)
-        : getMonochromeHex(1)
+  getMonochromeByTheme({ darkVariant: 10, lightVariant: 4 })
 )
 </script>
 

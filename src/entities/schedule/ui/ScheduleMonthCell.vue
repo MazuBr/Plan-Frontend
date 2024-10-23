@@ -10,7 +10,7 @@ import { ref } from "vue"
 import Button from "@/shared/ui/design/ui/button/Button.vue"
 import UpdateEventDialog from "@/entities/event/ui/UpdateEventDialog.vue"
 import { LocationQuery } from "vue-router"
-import { useColorMode } from "@vueuse/core"
+import { getCustomStyleByTheme } from "@/shared/lib/theme-manager"
 
 const props = withDefaults(
   defineProps<{
@@ -26,15 +26,14 @@ const props = withDefaults(
 
 const popoverOpened = ref(false)
 
-const mode = useColorMode()
 function applySelection(query: LocationQuery) {
   if (props.notSameMonth) return "opacity-50"
 
   if (props.fullDay === query.date)
-    return mode.value === "dark" ||
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "border border-monochrome-10 rounded-md"
-      : "border border-monochrome-6 rounded-md"
+    return getCustomStyleByTheme({
+      darkVariant: "border border-monochrome-10 rounded-md",
+      lightVariant: "border border-monochrome-6 rounded-md",
+    })
 }
 </script>
 
