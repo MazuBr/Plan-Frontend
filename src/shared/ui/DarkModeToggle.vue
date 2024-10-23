@@ -9,8 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "./design/ui/dropdown-menu"
 
-// Pass { disableTransition: false } to enable transitions
-const mode = useColorMode()
+const mode = useColorMode({ disableTransition: false })
 </script>
 
 <template>
@@ -27,9 +26,13 @@ const mode = useColorMode()
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem @click="mode = 'light'"> Светлая тема </DropdownMenuItem>
+      <DropdownMenuItem @click="mode = 'light'">
+        Светлая тема
+      </DropdownMenuItem>
       <DropdownMenuItem @click="mode = 'dark'"> Тёмная темп </DropdownMenuItem>
-      <DropdownMenuItem @click="mode = 'auto'"> Дефолт системы </DropdownMenuItem>
+      <DropdownMenuItem @click="mode = 'auto'">
+        Дефолт системы
+      </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

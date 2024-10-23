@@ -10,7 +10,7 @@ import {
 
 <template>
   <div class="flex justify-evenly items-center h-full">
-    <Card class="w-[320px]">
+    <Card>
       <CardHeader>
         <div>
           <router-link v-if="$route.name !== 'login'" :to="{ name: 'login' }">
@@ -25,14 +25,5 @@ import {
         <router-view></router-view>
       </CardContent>
     </Card>
-
-    <div>
-      <img
-        src="./abstract_cube-Photoroom.png"
-        alt="random cube"
-        class="animate-spin object-cover h-[400px] w-[400px]"
-        style="animation-duration: 30000ms"
-      />
-    </div>
   </div>
 </template>
